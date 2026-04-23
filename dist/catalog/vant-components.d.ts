@@ -1,0 +1,10 @@
+import { ComponentApi, FunctionImplementation } from '@a2ui/web_core/v0_9';
+export declare const CellGroupApi: ComponentApi;
+export declare const TagApi: ComponentApi;
+export declare const VantButtonApi: ComponentApi;
+export declare const VantTextFieldApi: ComponentApi;
+export declare const VantChoicePickerApi: ComponentApi;
+export declare const VantSliderApi: ComponentApi;
+export declare const VantDateTimeInputApi: ComponentApi;
+export declare const VANT_COMPONENTS_LIST: ComponentApi[];
+export declare const VANT_FUNCTIONS_LIST: FunctionImplementation[];

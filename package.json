@@ -1,0 +1,47 @@
+{
+  "name": "@local/a2ui-vant-renderer",
+  "version": "0.1.0",
+  "description": "Vue 3 renderer for A2UI v0.9 using Vant, with multi-catalog registration support.",
+  "type": "module",
+  "main": "./dist/a2ui-vant-renderer.umd.cjs",
+  "module": "./dist/a2ui-vant-renderer.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/a2ui-vant-renderer.js",
+      "require": "./dist/a2ui-vant-renderer.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./style.css": "./dist/a2ui-vant-renderer.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build"
+  },
+  "peerDependencies": {
+    "@a2ui/web_core": "^0.9.0",
+    "vue": "^3.5.0",
+    "vant": "^4.9.0"
+  },
+  "dependencies": {
+    "zod": "^3.25.0",
+    "zod-to-json-schema": "^3.25.2"
+  },
+  "devDependencies": {
+    "@a2ui/web_core": "^0.9.0",
+    "@types/node": "^24.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.8.1",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.3",
+    "vite-plugin-dts": "^4.5.4",
+    "vue": "^3.5.0",
+    "vue-tsc": "^3.2.6",
+    "vant": "^4.9.0"
+  },
+  "style": "./dist/a2ui-vant-renderer.css"
+}
