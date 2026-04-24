@@ -13,9 +13,8 @@
     VANT_COMPONENTS,
     VANT_FUNCTIONS,
     VANT_THEME_SCHEMA,
-    vantCatalogSchema,
   } from '@demo-renderer';
-console.log(vantCatalogSchema,'vantCatalogSchema')
+  import { SmartSummaryApi } from './customCatalog';
   type DemoMode = 'basic' | 'vant';
 
   const mode = ref<DemoMode>('vant');
@@ -33,7 +32,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
         ),
         new Catalog(
           VANT_CATALOG_ID,
-          VANT_COMPONENTS,
+          [...VANT_COMPONENTS, SmartSummaryApi],
           VANT_FUNCTIONS,
           VANT_THEME_SCHEMA,
         ),
@@ -64,7 +63,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
         ),
         new Catalog(
           VANT_CATALOG_ID,
-          VANT_COMPONENTS,
+          [...VANT_COMPONENTS, SmartSummaryApi],
           VANT_FUNCTIONS,
           VANT_THEME_SCHEMA,
         ),
@@ -101,6 +100,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
                 name: 'Lee',
                 role: 'Product Engineer',
                 summary: 'Editing Lee (Product Engineer)',
+                status: 'Change the display name, then blur the field or press save.',
               },
             },
           },
@@ -111,9 +111,10 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
             surfaceId,
             components: [
               { id: 'root', component: 'Card', child: 'content' },
-              { id: 'content', component: 'Column', children: ['title', 'subtitle', 'input', 'submit'] },
+              { id: 'content', component: 'Column', children: ['title', 'subtitle', 'hint', 'input', 'submit'] },
               { id: 'title', component: 'Text', text: 'Basic Catalog Demo', variant: 'h3' },
               { id: 'subtitle', component: 'Text', text: { path: '/profile/summary' } },
+              { id: 'hint', component: 'Text', text: { path: '/profile/status' }, variant: 'caption' },
               {
                 id: 'input',
                 component: 'TextField',
@@ -129,7 +130,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
               {
                 id: 'submit',
                 component: 'Button',
-                text: 'Save Profile',
+                child: 'submit-label',
                 variant: 'primary',
                 action: {
                   event: {
@@ -141,6 +142,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
                   },
                 },
               },
+              { id: 'submit-label', component: 'Text', text: 'Save Profile' },
             ],
           },
         },
@@ -169,6 +171,8 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
                 note: 'Less ice',
                 topping: 'Pearls',
                 sweetness: 60,
+                summary: 'Pearls, 60% sweet, less ice',
+                syncedSummary: '',
               },
             },
           },
@@ -178,14 +182,26 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
           updateComponents: {
             surfaceId,
             components: [
-              { id: 'root', component: 'CellGroup', title: 'Bubble Tea Builder', children: ['tag', 'note', 'picker', 'sweetness', 'cta'] },
+              { id: 'root', component: 'Column', children: ['hero-card', 'builder-group', 'summary-card', 'cta-card'] },
+              { id: 'hero-card', component: 'Card', child: 'hero-content' },
+              { id: 'hero-content', component: 'Column', children: ['tag', 'preview'] },
               { id: 'tag', component: 'Tag', text: 'Mobile Catalog', type: 'success' },
+              { id: 'preview', component: 'Text', text: { path: '/order/summary' }, variant: 'caption' },
+              { id: 'builder-group', component: 'CellGroup', title: 'Bubble Tea Builder', inset: true, children: ['note', 'picker', 'sweetness'] },
               {
                 id: 'note',
                 component: 'TextField',
                 label: 'Order Note',
                 placeholder: 'No ice / less sugar / extra tea',
                 value: { path: '/order/note' },
+                action: {
+                  event: {
+                    name: 'note_blur',
+                    context: {
+                      note: { path: '/order/note' },
+                    },
+                  },
+                },
               },
               {
                 id: 'picker',
@@ -204,10 +220,31 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
                 max: 100,
                 step: 10,
               },
+              { id: 'summary-card', component: 'Card', child: 'summary-content' },
+              { id: 'summary-content', component: 'Column', children: ['smart-summary', 'synced-summary'] },
+              {
+                id: 'smart-summary',
+                component: 'SmartSummary',
+                title: 'useA2UI Example',
+                ctaText: 'Build Custom Summary',
+                paths: ['/order/note', '/order/topping', '/order/sweetness'],
+                labels: ['Note', 'Topping', 'Sweetness'],
+                persistTo: '/order/syncedSummary',
+                action: {
+                  event: {
+                    name: 'sync_summary',
+                    context: {
+                      synced: { path: '/order/syncedSummary' },
+                    },
+                  },
+                },
+              },
+              { id: 'synced-summary', component: 'Text', text: { path: '/order/syncedSummary' }, variant: 'caption' },
+              { id: 'cta-card', component: 'Card', child: 'cta' },
               {
                 id: 'cta',
                 component: 'Button',
-                text: 'Submit Order',
+                child: 'cta-label',
                 variant: 'primary',
                 block: true,
                 action: {
@@ -221,6 +258,7 @@ console.log(vantCatalogSchema,'vantCatalogSchema')
                   },
                 },
               },
+              { id: 'cta-label', component: 'Text', text: 'Submit Order' },
             ],
           },
         },

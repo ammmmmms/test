@@ -1,66 +1,71 @@
 <script setup lang="ts">
   import {
+    Cell as VanCell,
     Checkbox as VanCheckbox,
     CheckboxGroup as VanCheckboxGroup,
     Radio as VanRadio,
     RadioGroup as VanRadioGroup,
   } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { computed, toRef } from 'vue';
+  import { VantChoicePickerApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue, setData, dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantChoicePickerApi);
 
-  const options = computed<(string | number)[]>(() => resolveValue<any[]>(props.node.properties.options) ?? []);
-  const label = computed(() => resolveValue<string | undefined>(props.node.properties.label) ?? '');
-  const valuePath = computed(() => props.node.properties.value?.path);
-  const multiple = computed(() => resolveValue<string | undefined>(props.node.properties.variant) === 'multipleSelection');
+  const options = computed<(string | number)[]>(() => boundProps.value.options ?? []);
+  const label = computed(() => boundProps.value.label ?? '');
+  const multiple = computed(() => boundProps.value.variant === 'multipleSelection');
 
   const modelValue = computed<any>({
     get: () =>
-      resolveValue<any>(props.node.properties.value) ??
+      boundProps.value.value ??
       (multiple.value ? [] : ''),
     set: (value) => {
-      if (valuePath.value) setData(valuePath.value, value);
-      dispatchNodeAction(props.node, { value });
+      boundProps.value.setValue?.(value);
+      boundProps.value.action?.();
     },
   });
 </script>
 
 <template>
-  <div class="a2ui-choice-picker">
-    <div
-      v-if="label"
-      class="a2ui-field-label"
-    >
-      {{ label }}
-    </div>
+  <VanCell class="a2ui-choice-picker-cell">
+    <template #title>
+      <div class="a2ui-choice-picker">
+        <div
+          v-if="label"
+          class="a2ui-field-label"
+        >
+          {{ label }}
+        </div>
 
-    <VanCheckboxGroup
-      v-if="multiple"
-      v-model="modelValue"
-    >
-      <VanCheckbox
-        v-for="option in options"
-        :key="String(option)"
-        :name="option"
-      >
-        {{ option }}
-      </VanCheckbox>
-    </VanCheckboxGroup>
+        <VanCheckboxGroup
+          v-if="multiple"
+          v-model="modelValue"
+        >
+          <VanCheckbox
+            v-for="option in options"
+            :key="String(option)"
+            :name="option"
+          >
+            {{ option }}
+          </VanCheckbox>
+        </VanCheckboxGroup>
 
-    <VanRadioGroup
-      v-else
-      v-model="modelValue"
-    >
-      <VanRadio
-        v-for="option in options"
-        :key="String(option)"
-        :name="option"
-      >
-        {{ option }}
-      </VanRadio>
-    </VanRadioGroup>
-  </div>
+        <VanRadioGroup
+          v-else
+          v-model="modelValue"
+        >
+          <VanRadio
+            v-for="option in options"
+            :key="String(option)"
+            :name="option"
+          >
+            {{ option }}
+          </VanRadio>
+        </VanRadioGroup>
+      </div>
+    </template>
+  </VanCell>
 </template>

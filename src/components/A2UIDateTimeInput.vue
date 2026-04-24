@@ -1,21 +1,23 @@
 <script setup lang="ts">
   import { Field as VanField } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { computed, toRef } from 'vue';
+  import { VantDateTimeInputApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue, setData, dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantDateTimeInputApi);
 
-  const label = computed(() => resolveValue<string | undefined>(props.node.properties.label) ?? '');
-  const valuePath = computed(() => props.node.properties.value?.path);
-  const enableTime = computed(() => !!resolveValue<boolean | undefined>(props.node.properties.enableTime));
+  const label = computed(() => boundProps.value.label ?? '');
+  const min = computed(() => boundProps.value.min);
+  const max = computed(() => boundProps.value.max);
+  const enableTime = computed(() => !!boundProps.value.enableTime);
   const inputType = computed(() => (enableTime.value ? 'datetime-local' : 'date'));
 
   const modelValue = computed({
-    get: () => resolveValue<string | undefined>(props.node.properties.value) ?? '',
+    get: () => boundProps.value.value ?? '',
     set: (value: string) => {
-      if (valuePath.value) setData(valuePath.value, value);
+      boundProps.value.setValue?.(value);
     },
   });
 </script>
@@ -25,8 +27,8 @@
     v-model="modelValue"
     :label="label"
     :type="inputType"
-    :data-min="resolveValue<string | undefined>(node.properties.min)"
-    :data-max="resolveValue<string | undefined>(node.properties.max)"
-    @blur="dispatchNodeAction(node, { value: modelValue })"
+    :data-min="min"
+    :data-max="max"
+    @blur="boundProps.action?.()"
   />
 </template>

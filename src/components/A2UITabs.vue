@@ -1,20 +1,19 @@
 <script setup lang="ts">
   import { Tab as VanTab, Tabs as VanTabs } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { ref } from 'vue';
+  import { computed, ref, toRef } from 'vue';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { useDynamicProps } from '../composables/useDynamicProps';
-  import { useA2UI } from '../composables/useA2UI';
+  import { VantTabsApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
   const active = ref(0);
-  const dynamicProps = useDynamicProps(() => props.node.properties);
-  const { dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantTabsApi);
+  const tabs = computed(() => boundProps.value.tabs ?? []);
 
   const handleChange = (index: number) => {
     active.value = index;
-    const tab = (dynamicProps.value.tabs ?? [])[index];
-    dispatchNodeAction(props.node, { tabIndex: index, tabTitle: tab?.title });
+    boundProps.value.action?.();
   };
 </script>
 
@@ -24,7 +23,7 @@
     @change="handleChange"
   >
     <VanTab
-      v-for="(tab, index) in dynamicProps.tabs ?? []"
+      v-for="(tab, index) in tabs"
       :key="index"
       :title="tab.title"
     >

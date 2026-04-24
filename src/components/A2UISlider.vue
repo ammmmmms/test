@@ -1,21 +1,21 @@
 <script setup lang="ts">
   import { Slider as VanSlider } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { computed, toRef } from 'vue';
+  import { VantSliderApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue, setData, dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantSliderApi);
 
-  const valuePath = computed(() => props.node.properties.value?.path);
-  const min = computed(() => resolveValue<number | undefined>(props.node.properties.min) ?? 0);
-  const max = computed(() => resolveValue<number | undefined>(props.node.properties.max) ?? 100);
-  const step = computed(() => resolveValue<number | undefined>(props.node.properties.step) ?? 1);
+  const min = computed(() => boundProps.value.min ?? 0);
+  const max = computed(() => boundProps.value.max ?? 100);
+  const step = computed(() => boundProps.value.step ?? 1);
 
   const modelValue = computed({
-    get: () => resolveValue<number>(props.node.properties.value) ?? 0,
+    get: () => boundProps.value.value ?? 0,
     set: (value: number) => {
-      if (valuePath.value) setData(valuePath.value, value);
+      boundProps.value.setValue?.(value);
     },
   });
 </script>
@@ -26,6 +26,6 @@
     :min="min"
     :max="max"
     :step="step"
-    @change="dispatchNodeAction(node, { value: modelValue })"
+    @change="boundProps.action?.()"
   />
 </template>

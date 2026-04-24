@@ -1,1 +1,1 @@
-{"root":["./src/main.ts","./src/app.vue"],"version":"5.9.3"}
+{"root":["./src/customcatalog.ts","./src/main.ts","./src/app.vue","./src/components/a2uismartsummary.vue"],"version":"5.9.3"}

@@ -1,16 +1,18 @@
 <script setup lang="ts">
   import { CellGroup as VanCellGroup } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
+  import { computed, toRef } from 'vue';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { CellGroupApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
+  import { normalizeChildren } from '../composables/normalizeChildren';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveDynamicChildren, resolveValue } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), CellGroupApi);
 
-  const title = computed(() => resolveValue<string | undefined>(props.node.properties.title) ?? '');
-  const inset = computed(() => !!resolveValue<boolean | undefined>(props.node.properties.inset));
-  const children = computed(() => resolveDynamicChildren(props.node.properties.children));
+  const title = computed(() => boundProps.value.title ?? '');
+  const inset = computed(() => !!boundProps.value.inset);
+  const children = computed(() => normalizeChildren(boundProps.value.children));
 </script>
 
 <template>
@@ -19,7 +21,7 @@
       v-for="(child, index) in children"
       :key="`${child.id}-${index}`"
       :id="child.id"
-      :path="child.path"
+      :path="child.basePath"
     />
   </VanCellGroup>
 </template>

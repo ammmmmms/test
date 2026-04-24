@@ -1,21 +1,29 @@
 <script setup lang="ts">
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
+  import { ListApi } from '@a2ui/web_core/v0_9/basic_catalog';
+  import { computed, toRef } from 'vue';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { useBoundProps } from '../composables/useBoundProps';
+  import { normalizeChildren } from '../composables/normalizeChildren';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveDynamicChildren } = useA2UI();
-  const children = computed(() => resolveDynamicChildren(props.node.properties.children));
+  const { boundProps } = useBoundProps(toRef(props, 'node'), ListApi);
+  const children = computed(() => normalizeChildren(boundProps.value.children));
+  const direction = computed(() => boundProps.value.direction ?? 'vertical');
+  const align = computed(() => boundProps.value.align ?? 'stretch');
 </script>
 
 <template>
-  <div class="a2ui-list">
+  <div
+    class="a2ui-list"
+    :data-direction="direction"
+    :data-align="align"
+  >
     <ComponentNode
       v-for="(child, index) in children"
       :key="`${child.id}-${index}`"
       :id="child.id"
-      :path="child.path"
+      :path="child.basePath"
     />
   </div>
 </template>

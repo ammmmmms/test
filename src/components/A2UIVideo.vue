@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { VideoApi } from '@a2ui/web_core/v0_9/basic_catalog';
+  import { computed, toRef } from 'vue';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue } = useA2UI();
-  const src = computed(() => resolveValue<string | undefined>(props.node.properties.url) ?? '');
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VideoApi);
+  const src = computed(() => boundProps.value.url ?? '');
 </script>
 
 <template>

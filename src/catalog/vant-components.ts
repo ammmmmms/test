@@ -6,6 +6,7 @@ import {
   DynamicBooleanSchema,
   DynamicNumberSchema,
   DynamicStringSchema,
+  DynamicStringListSchema,
   type ComponentApi,
   type FunctionImplementation,
 } from '@a2ui/web_core/v0_9';
@@ -15,7 +16,7 @@ import {
 } from '@a2ui/web_core/v0_9/basic_catalog';
 import { CommonProps } from './common-props';
 
-export const CellGroupApi: ComponentApi = {
+export const CellGroupApi = {
   name: 'CellGroup',
   schema: z
     .object({
@@ -25,9 +26,9 @@ export const CellGroupApi: ComponentApi = {
       inset: DynamicBooleanSchema.optional(),
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const TagApi: ComponentApi = {
+export const TagApi = {
   name: 'Tag',
   schema: z
     .object({
@@ -40,9 +41,9 @@ export const TagApi: ComponentApi = {
       plain: DynamicBooleanSchema.optional(),
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const VantButtonApi: ComponentApi = {
+export const VantButtonApi = {
   name: 'Button',
   schema: z
     .object({
@@ -59,9 +60,9 @@ export const VantButtonApi: ComponentApi = {
       block: DynamicBooleanSchema.optional(),
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const VantTextFieldApi: ComponentApi = {
+export const VantTextFieldApi = {
   name: 'TextField',
   schema: z
     .object({
@@ -77,16 +78,29 @@ export const VantTextFieldApi: ComponentApi = {
       checks: CheckableSchema.shape.checks,
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const VantChoicePickerApi: ComponentApi = {
+export const VantCheckBoxApi = {
+  name: 'CheckBox',
+  schema: z
+    .object({
+      ...CommonProps,
+      label: DynamicStringSchema,
+      value: DynamicBooleanSchema,
+      action: ActionSchema.optional(),
+      checks: CheckableSchema.shape.checks,
+    })
+    .strict(),
+} satisfies ComponentApi;
+
+export const VantChoicePickerApi = {
   name: 'ChoicePicker',
   schema: z
     .object({
       ...CommonProps,
       label: DynamicStringSchema.optional(),
       options: z.array(z.union([z.string(), z.number()])),
-      value: z.union([DynamicStringSchema, z.array(z.any())]).optional(),
+      value: DynamicStringListSchema.optional(),
       variant: z
         .enum(['mutuallyExclusive', 'multipleSelection'])
         .default('mutuallyExclusive')
@@ -95,12 +109,13 @@ export const VantChoicePickerApi: ComponentApi = {
         .enum(['list', 'dropdown'])
         .default('list')
         .optional(),
+      action: ActionSchema.optional(),
       checks: CheckableSchema.shape.checks,
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const VantSliderApi: ComponentApi = {
+export const VantSliderApi = {
   name: 'Slider',
   schema: z
     .object({
@@ -112,9 +127,9 @@ export const VantSliderApi: ComponentApi = {
       action: ActionSchema.optional(),
     })
     .strict(),
-};
+} satisfies ComponentApi;
 
-export const VantDateTimeInputApi: ComponentApi = {
+export const VantDateTimeInputApi = {
   name: 'DateTimeInput',
   schema: z
     .object({
@@ -127,14 +142,45 @@ export const VantDateTimeInputApi: ComponentApi = {
       action: ActionSchema.optional(),
     })
     .strict(),
-};
+} satisfies ComponentApi;
+
+export const VantTabsApi = {
+  name: 'Tabs',
+  schema: z
+    .object({
+      ...CommonProps,
+      tabs: z.array(
+        z.object({
+          title: DynamicStringSchema,
+          child: z.string(),
+        }).strict(),
+      ).min(1),
+      action: ActionSchema.optional(),
+    })
+    .strict(),
+} satisfies ComponentApi;
+
+export const VantModalApi = {
+  name: 'Modal',
+  schema: z
+    .object({
+      ...CommonProps,
+      trigger: z.string(),
+      content: z.string(),
+      action: ActionSchema.optional(),
+    })
+    .strict(),
+} satisfies ComponentApi;
 
 const overrideNames = new Set([
   'Button',
   'TextField',
+  'CheckBox',
   'ChoicePicker',
   'Slider',
   'DateTimeInput',
+  'Tabs',
+  'Modal',
 ]);
 
 const baseComponents = BASIC_COMPONENTS.filter(
@@ -147,9 +193,12 @@ export const VANT_COMPONENTS_LIST: ComponentApi[] = [
   TagApi,
   VantButtonApi,
   VantTextFieldApi,
+  VantCheckBoxApi,
   VantChoicePickerApi,
   VantSliderApi,
   VantDateTimeInputApi,
+  VantTabsApi,
+  VantModalApi,
 ];
 
 export const VANT_FUNCTIONS_LIST: FunctionImplementation[] = [...BASIC_FUNCTIONS];

@@ -2,15 +2,16 @@
   import { Tag as VanTag } from 'vant';
   import type { TagType } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { computed, toRef } from 'vue';
+  import { TagApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), TagApi);
 
-  const text = computed(() => resolveValue<string | undefined>(props.node.properties.text) ?? '');
+  const text = computed(() => boundProps.value.text ?? '');
   const type = computed<TagType>(() => {
-    const value = resolveValue<string | undefined>(props.node.properties.type);
+    const value = boundProps.value.type;
     switch (value) {
       case 'primary':
       case 'success':
@@ -21,7 +22,7 @@
         return 'default';
     }
   });
-  const plain = computed(() => !!resolveValue<boolean | undefined>(props.node.properties.plain));
+  const plain = computed(() => !!boundProps.value.plain);
 </script>
 
 <template>

@@ -2,11 +2,22 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import 'vant/lib/index.css';
 import '@demo-renderer/style.css';
-import { A2UiVueRenderer } from '@demo-renderer';
+import { A2UiVueRenderer, VANT_CATALOG_ID } from '@demo-renderer';
+import {
+  exampleCatalogApis,
+  exampleCatalogComponents,
+} from './customCatalog';
 
 createApp(App)
   .use(A2UiVueRenderer, {
     registerBasicCatalog: true,
     registerVantCatalog: true,
+    catalogs: [
+      {
+        catalogId: VANT_CATALOG_ID,
+        components: exampleCatalogComponents,
+        apis: exampleCatalogApis,
+      },
+    ],
   })
   .mount('#app');

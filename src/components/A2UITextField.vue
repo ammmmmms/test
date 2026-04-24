@@ -1,18 +1,18 @@
 <script setup lang="ts">
   import { Field as VanField } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { computed, toRef } from 'vue';
+  import { useBoundProps } from '../composables/useBoundProps';
+  import { VantTextFieldApi } from '../catalog/vant-components';
   import { getValidationMessage } from '../utils/validation';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue, setData, dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantTextFieldApi);
 
-  const label = computed(() => resolveValue<string | undefined>(props.node.properties.label) ?? '');
-  const placeholder = computed(() => resolveValue<string | undefined>(props.node.properties.placeholder) ?? '');
-  const checks = computed(() => resolveValue<any[]>(props.node.properties.checks) ?? []);
-  const valuePath = computed(() => props.node.properties.value?.path);
-  const variant = computed(() => resolveValue<string | undefined>(props.node.properties.variant) ?? 'shortText');
+  const label = computed(() => boundProps.value.label ?? '');
+  const placeholder = computed(() => boundProps.value.placeholder ?? '');
+  const checks = computed(() => boundProps.value.checks ?? []);
+  const variant = computed(() => boundProps.value.variant ?? 'shortText');
   const errorMessage = computed(() => getValidationMessage(checks.value, modelValue.value));
   const inputType = computed(() => {
     switch (variant.value) {
@@ -26,9 +26,9 @@
   });
 
   const modelValue = computed({
-    get: () => resolveValue<string | undefined>(props.node.properties.value) ?? '',
+    get: () => boundProps.value.value ?? '',
     set: (value: string) => {
-      if (valuePath.value) setData(valuePath.value, value);
+      boundProps.value.setValue?.(value);
     },
   });
 </script>
@@ -43,6 +43,6 @@
     :autosize="variant === 'longText'"
     :error="!!errorMessage"
     :error-message="errorMessage"
-    @blur="dispatchNodeAction(node, { value: modelValue })"
+    @blur="boundProps.action?.()"
   />
 </template>

@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import { CellGroup as VanCellGroup } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { computed } from 'vue';
+  import { CardApi } from '@a2ui/web_core/v0_9/basic_catalog';
+  import { computed, toRef } from 'vue';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { useA2UI } from '../composables/useA2UI';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { resolveValue } = useA2UI();
-  const childId = computed(() => resolveValue<string | undefined>(props.node.properties.child));
+  const { boundProps } = useBoundProps(toRef(props, 'node'), CardApi);
+  const childId = computed(() => boundProps.value.child);
 </script>
 
 <template>

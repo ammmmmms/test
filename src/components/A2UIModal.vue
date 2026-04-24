@@ -3,33 +3,33 @@
   import { ref } from 'vue';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { useDynamicProps } from '../composables/useDynamicProps';
-  import { useA2UI } from '../composables/useA2UI';
+  import { toRef } from 'vue';
+  import { VantModalApi } from '../catalog/vant-components';
+  import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const dynamicProps = useDynamicProps(() => props.node.properties);
-  const { dispatchNodeAction } = useA2UI();
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantModalApi);
   const open = ref(false);
 
   const show = () => {
     open.value = true;
-    dispatchNodeAction(props.node, { open: true });
+    boundProps.value.action?.();
   };
 
   const hide = () => {
     open.value = false;
-    dispatchNodeAction(props.node, { open: false });
+    boundProps.value.action?.();
   };
 </script>
 
 <template>
   <div class="a2ui-modal">
     <div
-      v-if="dynamicProps.trigger"
+      v-if="boundProps.trigger"
       class="a2ui-modal-trigger"
       @click="show"
     >
-      <ComponentNode :id="dynamicProps.trigger" />
+      <ComponentNode :id="boundProps.trigger" />
     </div>
     <VanPopup
       v-model:show="open"
@@ -39,8 +39,8 @@
     >
       <div class="a2ui-modal-content">
         <ComponentNode
-          v-if="dynamicProps.content"
-          :id="dynamicProps.content"
+          v-if="boundProps.content"
+          :id="boundProps.content"
         />
       </div>
     </VanPopup>
