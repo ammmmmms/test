@@ -13,6 +13,8 @@
     VANT_COMPONENTS,
     VANT_FUNCTIONS,
     VANT_THEME_SCHEMA,
+    getCatalogSchema,
+    defaultRegistry
   } from '@demo-renderer';
   import { SmartSummaryApi } from './customCatalog';
   type DemoMode = 'basic' | 'vant';
@@ -20,7 +22,7 @@
   const mode = ref<DemoMode>('vant');
   const surfaceId = 'demo-surface';
   const actionLog = ref<string[]>([]);
-
+console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_ID))
   const processor = ref(
     new MessageProcessor(
       [
