@@ -170,7 +170,7 @@ html, body, #app {
 
 .a2ui-card,
 .a2ui-modal-content {
-  padding: var(--a2ui-spacing-l);
+  padding: var(--a2ui-spacing-m);
   background: var(--a2ui-color-background);
   color: var(--a2ui-color-on-surface);
   border: var(--a2ui-border);
