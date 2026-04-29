@@ -29,30 +29,34 @@
   const surface = computed(() => props.processor?.model?.getSurface(props.surfaceId));
   const themeStyle = computed<Record<string, string>>(() => {
     const theme = surface.value?.theme ?? {};
-    return {
-      '--a2ui-color-primary': theme.colorPrimary ?? theme.primaryColor ?? '',
-      '--a2ui-color-background': theme.colorBackground ?? theme.backgroundColor ?? '',
-      '--a2ui-color-surface': theme.colorSurface ?? theme.surfaceColor ?? '',
-      '--a2ui-color-on-background': theme.colorOnBackground ?? '',
-      '--a2ui-color-on-surface': theme.colorOnSurface ?? '',
-      '--a2ui-color-border': theme.colorBorder ?? '',
-      '--a2ui-border-radius': theme.borderRadius ?? theme.roundRadius ?? '',
-      '--a2ui-font-size': theme.fontSize ?? '',
-      '--a2ui-font-scale': theme.fontScale ?? '',
-      '--a2ui-spacing-m': theme.spacingM ?? '',
+    const styles: Record<string, string | undefined> = {
+      '--a2ui-color-primary': theme.colorPrimary,
+      '--a2ui-color-background': theme.colorBackground,
+      '--a2ui-color-surface': theme.colorSurface,
+      '--a2ui-color-on-background': theme.colorOnBackground,
+      '--a2ui-color-on-surface': theme.colorOnSurface,
+      '--a2ui-color-border': theme.colorBorder,
+      '--a2ui-border-radius': theme.borderRadius,
+      '--a2ui-font-size': theme.fontSize,
+      '--a2ui-font-scale': theme.fontScale,
+      '--a2ui-spacing-m': theme.spacingM,
 
       // Bridge A2UI theme values into Vant variables where it helps visual parity.
-      '--van-primary-color': theme.colorPrimary ?? theme.primaryColor ?? '',
-      '--van-success-color': theme.colorSuccess ?? theme.successColor ?? '',
-      '--van-warning-color': theme.colorWarning ?? theme.warningColor ?? '',
-      '--van-danger-color': theme.errorColor ?? '',
-      '--van-background': theme.colorBackground ?? theme.backgroundColor ?? '',
-      '--van-background-2': theme.colorSurface ?? theme.surfaceColor ?? '',
-      '--van-text-color': theme.colorOnBackground ?? '',
-      '--van-border-color': theme.colorBorder ?? '',
-      '--van-radius-lg': theme.borderRadius ?? theme.roundRadius ?? '',
-      '--van-radius-md': theme.borderRadius ?? theme.roundRadius ?? '',
+      '--van-primary-color': theme.colorPrimary,
+      '--van-success-color': theme.colorSuccess,
+      '--van-warning-color': theme.colorWarning,
+      '--van-danger-color': theme.colorDanger,
+      '--van-background': theme.colorBackground,
+      '--van-background-2': theme.colorSurface,
+      '--van-text-color': theme.colorOnBackground,
+      '--van-border-color': theme.colorBorder,
+      '--van-radius-lg': theme.borderRadius,
+      '--van-radius-md': theme.borderRadius,
     };
+
+    return Object.fromEntries(
+      Object.entries(styles).filter(([, value]) => value !== undefined && value !== ''),
+    ) as Record<string, string>;
   });
 
   provide(A2UI_CONTEXT_KEY, {

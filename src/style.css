@@ -1,4 +1,4 @@
-:where(:root) {
+:root {
   color-scheme: light;
 
   --a2ui-color-background: #fff;
@@ -66,7 +66,7 @@
   --van-radius-lg: var(--a2ui-border-radius);
 }
 
-:where(.a2ui-dark) {
+.a2ui-dark {
   color-scheme: dark;
 
   --a2ui-color-background: #111;
@@ -87,12 +87,12 @@
   --a2ui-text-caption-color: #aaa;
 }
 
-:where(.a2ui-light) {
+.a2ui-light {
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :where(:root):not(.a2ui-light):not(.a2ui-dark) {
+  :root:not(.a2ui-light):not(.a2ui-dark) {
     color-scheme: dark;
 
     --a2ui-color-background: #111;

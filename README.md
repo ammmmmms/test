@@ -616,6 +616,7 @@ registerCatalogDefinition(
 - `spacingM`
 - `colorSuccess`
 - `colorWarning`
+- `colorDanger`
 
 这些字段会在 `A2UIProvider` 里映射到官方 A2UI CSS 变量，例如：
 
@@ -640,16 +641,6 @@ registerCatalogDefinition(
 - `--van-background-2`
 - `--van-text-color`
 - `--van-border-color`
-
-兼容字段仍然保留：
-
-- `primaryColor`
-- `backgroundColor`
-- `surfaceColor`
-- `errorColor`
-- `successColor`
-- `warningColor`
-- `roundRadius`
 
 ## 17. 间距 / spacing 现在的现状
 
