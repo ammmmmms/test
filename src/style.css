@@ -1,26 +1,27 @@
 :where(:root) {
-  color-scheme: light dark;
+  color-scheme: light;
 
-  --a2ui-color-background: light-dark(#fff, #111);
-  --a2ui-color-on-background: light-dark(#333, #eee);
-  --a2ui-color-surface: light-dark(
-    color-mix(in oklab, var(--a2ui-color-background) 85%, white),
-    color-mix(in oklab, var(--a2ui-color-background) 95%, white)
+  --a2ui-color-background: #fff;
+  --a2ui-color-on-background: #333;
+  --a2ui-color-surface: color-mix(
+    in oklab,
+    var(--a2ui-color-background) 85%,
+    white
   );
-  --a2ui-color-on-surface: light-dark(#333, #eee);
+  --a2ui-color-on-surface: #333;
   --a2ui-color-primary: #ff6600;
   --a2ui-color-primary-light: color-mix(in oklab, var(--a2ui-color-primary) 85%, white);
   --a2ui-color-primary-dark: color-mix(in oklab, var(--a2ui-color-primary) 85%, black);
-  --a2ui-color-primary-hover: light-dark(var(--a2ui-color-primary-dark), var(--a2ui-color-primary-light));
+  --a2ui-color-primary-hover: var(--a2ui-color-primary-dark);
   --a2ui-color-on-primary: #fff;
-  --a2ui-color-secondary: light-dark(#ddd, #333);
+  --a2ui-color-secondary: #ddd;
   --a2ui-color-secondary-light: color-mix(in oklab, var(--a2ui-color-secondary) 85%, white);
   --a2ui-color-secondary-dark: color-mix(in oklab, var(--a2ui-color-secondary) 95%, black);
-  --a2ui-color-secondary-hover: light-dark(var(--a2ui-color-secondary-dark), var(--a2ui-color-secondary-light));
-  --a2ui-color-on-secondary: light-dark(#333, #eee);
-  --a2ui-color-border: light-dark(#e5e7eb, #444);
-  --a2ui-color-input: light-dark(#fff, #2a2a2a);
-  --a2ui-color-on-input: light-dark(#333, #eee);
+  --a2ui-color-secondary-hover: var(--a2ui-color-secondary-dark);
+  --a2ui-color-on-secondary: #333;
+  --a2ui-color-border: #e5e7eb;
+  --a2ui-color-input: #fff;
+  --a2ui-color-on-input: #333;
 
   --a2ui-border-radius: 8px;
   --a2ui-border-width: 1px;
@@ -47,9 +48,57 @@
   --a2ui-line-height-body: 1.5;
 
   --a2ui-text-color-text: var(--a2ui-color-on-background);
-  --a2ui-text-caption-color: light-dark(#666, #aaa);
+  --a2ui-text-caption-color: #666;
   --a2ui-text-a-color: inherit;
   --a2ui-text-a-font-weight: inherit;
+}
+
+:where(.a2ui-dark) {
+  color-scheme: dark;
+
+  --a2ui-color-background: #111;
+  --a2ui-color-on-background: #eee;
+  --a2ui-color-surface: color-mix(
+    in oklab,
+    var(--a2ui-color-background) 95%,
+    white
+  );
+  --a2ui-color-on-surface: #eee;
+  --a2ui-color-primary-hover: var(--a2ui-color-primary-light);
+  --a2ui-color-secondary: #333;
+  --a2ui-color-secondary-hover: var(--a2ui-color-secondary-light);
+  --a2ui-color-on-secondary: #eee;
+  --a2ui-color-border: #444;
+  --a2ui-color-input: #2a2a2a;
+  --a2ui-color-on-input: #eee;
+  --a2ui-text-caption-color: #aaa;
+}
+
+:where(.a2ui-light) {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :where(:root):not(.a2ui-light):not(.a2ui-dark) {
+    color-scheme: dark;
+
+    --a2ui-color-background: #111;
+    --a2ui-color-on-background: #eee;
+    --a2ui-color-surface: color-mix(
+      in oklab,
+      var(--a2ui-color-background) 95%,
+      white
+    );
+    --a2ui-color-on-surface: #eee;
+    --a2ui-color-primary-hover: var(--a2ui-color-primary-light);
+    --a2ui-color-secondary: #333;
+    --a2ui-color-secondary-hover: var(--a2ui-color-secondary-light);
+    --a2ui-color-on-secondary: #eee;
+    --a2ui-color-border: #444;
+    --a2ui-color-input: #2a2a2a;
+    --a2ui-color-on-input: #eee;
+    --a2ui-text-caption-color: #aaa;
+  }
 }
 
 html, body, #app {
@@ -192,7 +241,7 @@ html, body, #app {
 .a2ui-text--caption {
   font-size: var(--a2ui-font-size-xs);
   line-height: var(--a2ui-line-height-body, 1.5);
-  color: var(--a2ui-text-caption-color, light-dark(#666, #aaa));
+  color: var(--a2ui-text-caption-color, #666);
 }
 .a2ui-text--body {
   font-size: var(--a2ui-font-size-m);

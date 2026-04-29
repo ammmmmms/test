@@ -186,8 +186,35 @@ console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_I
             components: [
               { id: 'root', component: 'Column', children: ['hero-card', 'builder-group', 'summary-card', 'cta-card'] },
               { id: 'hero-card', component: 'Card', child: 'hero-content' },
-              { id: 'hero-content', component: 'Column', children: ['tag', 'preview'] },
+              { id: 'hero-content', component: 'Column', children: ['tag', 'icon-row', 'preview'] },
               { id: 'tag', component: 'Tag', text: 'Mobile Catalog', type: 'success' },
+              {
+                id: 'icon-row',
+                component: 'Row',
+                align: 'center',
+                children: ['icon-primary', 'icon-warning', 'icon-default'],
+              },
+              {
+                id: 'icon-primary',
+                component: 'Icon',
+                name: 'success',
+                size: 20,
+                type: 'primary',
+              },
+              {
+                id: 'icon-warning',
+                component: 'Icon',
+                name: 'warning-o',
+                size: 24,
+                type: 'warning',
+              },
+              {
+                id: 'icon-default',
+                component: 'Icon',
+                name: 'setting-o',
+                size: 18,
+                type: 'default',
+              },
               { id: 'preview', component: 'Text', text: { path: '/order/summary' }, variant: 'caption' },
               { id: 'builder-group', component: 'CellGroup', title: 'Bubble Tea Builder', inset: true, children: ['note', 'picker', 'sweetness'] },
               {
