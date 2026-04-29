@@ -13,8 +13,10 @@ import {
 import {
   BASIC_COMPONENTS,
   BASIC_FUNCTIONS,
+  RowApi,
 } from '@a2ui/web_core/v0_9/basic_catalog';
 import { CommonProps } from './common-props';
+import { VANT_ICON_NAMES, VANT_ICON_TYPES } from './vant-icon';
 
 export const CellGroupApi = {
   name: 'CellGroup',
@@ -41,6 +43,32 @@ export const TagApi = {
       plain: DynamicBooleanSchema.optional(),
     })
     .strict(),
+} satisfies ComponentApi;
+
+export const VantIconApi = {
+  name: 'Icon',
+  schema: z
+    .object({
+      ...CommonProps,
+      name: z
+        .enum(VANT_ICON_NAMES)
+        .describe(
+          'The Vant icon name, e.g. success, warning, setting-o, arrow-left.',
+        ),
+      size: DynamicNumberSchema.optional(),
+      type: z
+        .enum(VANT_ICON_TYPES)
+        .default('default')
+        .optional(),
+    })
+    .strict(),
+} satisfies ComponentApi;
+
+export const VantRowApi = {
+  name: 'Row',
+  schema: RowApi.schema.extend({
+    action: ActionSchema.optional(),
+  }),
 } satisfies ComponentApi;
 
 export const VantButtonApi = {
@@ -173,6 +201,8 @@ export const VantModalApi = {
 } satisfies ComponentApi;
 
 const overrideNames = new Set([
+  'Icon',
+  'Row',
   'Button',
   'TextField',
   'CheckBox',
@@ -191,6 +221,8 @@ export const VANT_COMPONENTS_LIST: ComponentApi[] = [
   ...baseComponents,
   CellGroupApi,
   TagApi,
+  VantIconApi,
+  VantRowApi,
   VantButtonApi,
   VantTextFieldApi,
   VantCheckBoxApi,

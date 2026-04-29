@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { CellGroup as VanCellGroup } from 'vant';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
   import { CardApi } from '@a2ui/web_core/v0_9/basic_catalog';
   import { computed, toRef } from 'vue';
@@ -12,12 +11,10 @@
 </script>
 
 <template>
-  <VanCellGroup inset>
-    <div class="a2ui-card">
-      <ComponentNode
-        v-if="childId"
-        :id="childId"
-      />
-    </div>
-  </VanCellGroup>
+  <div class="a2ui-card">
+    <ComponentNode
+      v-if="childId"
+      :id="childId"
+    />
+  </div>
 </template>

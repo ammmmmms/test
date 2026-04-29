@@ -1,17 +1,25 @@
 <script setup lang="ts">
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
-  import { RowApi } from '@a2ui/web_core/v0_9/basic_catalog';
   import { computed, toRef } from 'vue';
+  import { VantRowApi } from '../catalog/vant-components';
   import ComponentNode from '../core/ComponentNode.vue';
+  import { useA2UI } from '../composables/useA2UI';
   import { useBoundProps } from '../composables/useBoundProps';
   import { normalizeChildren } from '../composables/normalizeChildren';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), RowApi);
+  const { boundProps } = useBoundProps(toRef(props, 'node'), VantRowApi);
+  const { dispatchNodeAction } = useA2UI();
 
   const children = computed(() => normalizeChildren(boundProps.value.children));
   const justify = computed(() => boundProps.value.justify ?? 'start');
   const align = computed(() => boundProps.value.align ?? 'stretch');
+  const clickable = computed(() => !!boundProps.value.action);
+
+  const onClick = () => {
+    if (!clickable.value) return;
+    dispatchNodeAction(props.node);
+  };
 </script>
 
 <template>
@@ -19,6 +27,8 @@
     class="a2ui-row"
     :data-justify="justify"
     :data-align="align"
+    :class="{ 'a2ui-row--clickable': clickable }"
+    @click="onClick"
   >
     <ComponentNode
       v-for="(child, index) in children"

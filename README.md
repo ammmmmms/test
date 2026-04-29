@@ -131,7 +131,7 @@ export const VantButtonApi = {
 至少这些：
 
 ```bash
-pnpm add vue vant @a2ui/web_core
+pnpm add vue vant @a2ui/web_core @a2ui/markdown-it
 ```
 
 如果你是 `Vite + Vue` 项目，通常还需要：
@@ -283,6 +283,7 @@ defineProps<{
 例子：
 
 - `Button`
+- `Text`
 - `TextField`
 - `CheckBox`
 - `ChoicePicker`
@@ -501,6 +502,7 @@ export const MyBadgeApi = {
 如果是内置 `vant` 组件：
 
 - 在 [src/catalog/vant-components.ts](/Users/lee/a2ui-vant-renderer/src/catalog/vant-components.ts) 里补 API
+- 如果是 `Icon` 相关枚举，放到 [src/catalog/vant-icon.ts](/Users/lee/a2ui-vant-renderer/src/catalog/vant-icon.ts)
 - 在 [src/components/vant.ts](/Users/lee/a2ui-vant-renderer/src/components/vant.ts) 里补实现映射
 
 如果是第三套 catalog：
@@ -600,14 +602,54 @@ registerCatalogDefinition(
 
 - [A2UIProvider.vue](/Users/lee/a2ui-vant-renderer/src/composables/A2UIProvider.vue)
 
-比如现在已经接上的主题变量有：
+推荐优先传官方风格字段：
 
-- `--a2ui-primary-color`
-- `--a2ui-error-color`
-- `--a2ui-background-color`
-- `--a2ui-surface-color`
+- `colorPrimary`
+- `colorBackground`
+- `colorSurface`
+- `colorOnBackground`
+- `colorOnSurface`
+- `colorBorder`
+- `borderRadius`
+- `fontSize`
+- `fontScale`
+- `spacingM`
+- `colorSuccess`
+- `colorWarning`
 
-目前按钮已经明确吃到了 `--a2ui-primary-color`。
+这些字段会在 `A2UIProvider` 里映射到官方 A2UI CSS 变量，例如：
+
+- `--a2ui-color-primary`
+- `--a2ui-color-background`
+- `--a2ui-color-surface`
+- `--a2ui-color-on-background`
+- `--a2ui-color-on-surface`
+- `--a2ui-color-border`
+- `--a2ui-border-radius`
+- `--a2ui-font-size`
+- `--a2ui-font-scale`
+- `--a2ui-spacing-m`
+
+同时也会桥接一部分 `Vant` 变量，例如：
+
+- `--van-primary-color`
+- `--van-success-color`
+- `--van-warning-color`
+- `--van-danger-color`
+- `--van-background`
+- `--van-background-2`
+- `--van-text-color`
+- `--van-border-color`
+
+兼容字段仍然保留：
+
+- `primaryColor`
+- `backgroundColor`
+- `surfaceColor`
+- `errorColor`
+- `successColor`
+- `warningColor`
+- `roundRadius`
 
 ## 17. 间距 / spacing 现在的现状
 
@@ -616,14 +658,15 @@ registerCatalogDefinition(
 当前 renderer：
 
 - 有默认间距
-- 但大多是写死在样式里的
+- 优先走官方 `--a2ui-*` design token
 - 还没有一套完整的“通过 schema 配 gap / margin / padding”的能力
 
 比如：
 
 - `Row / Column / List` 现在默认有 `gap`
 - `Card / Modal` 默认有 `padding`
-- 但这些不是通用 schema 能力
+- `Text / Divider / Button / Field label` 也都已经优先消费 `--a2ui-*` 变量
+- 但这些仍然不是通用 schema 能力
 
 所以如果 demo 看起来有点挤，很多时候需要：
 
@@ -641,9 +684,34 @@ registerCatalogDefinition(
 - `Column`
   更适合在几个区块之间拉开垂直间距
 
+如果你的 `Card` 只是一个通用内容容器，不一定要再包 `CellGroup`。`CellGroup` 更适合一组 `Cell / Field` 的移动端分组样式。
+
 如果你发现所有内容都挤在一个 `CellGroup` 里，通常应该优先改 JSON 结构，而不是先去改组件代码。
 
-## 19. 一些你刚上手最容易踩的坑
+## 19. 内置 Vant 覆盖说明
+
+当前 `vant catalog` 已经对一部分官方 basic 组件做了同名覆盖，不只是换成 Vant 外观，也补了一些移动端语义：
+
+- `Row`
+  - 基于官方 `RowApi` 扩展
+  - 新增 `action`
+  - 点击整行时会触发 action
+- `Icon`
+  - 使用 Vant icon 语义，不再沿用官方 basic icon 名单
+  - `name` 使用本地维护的 Vant icon 枚举，定义在 [src/catalog/vant-icon.ts](/Users/lee/a2ui-vant-renderer/src/catalog/vant-icon.ts)
+  - `size` 接收 `number`，传给 `VanIcon.size`
+  - `type` 支持 `default | primary | success | warning | danger`，用于映射颜色
+- `Text`
+  - `caption` 会走 `@a2ui/markdown-it` 的 `renderMarkdown`
+  - 其他 `variant` 仍然按类名区分样式
+
+如果你继续扩 `vant catalog`，建议：
+
+- 能基于官方 `Api.schema.extend(...)` 的就优先 extend
+- 和具体 UI 库强绑定的常量，例如 Vant icon 名单，单独放文件维护
+- 同名覆盖时，schema、实现、catalog 注册三层一起改
+
+## 20. 一些你刚上手最容易踩的坑
 
 - `createSurface.catalogId` 和本地注册的 `catalogId` 不一致，页面不会按预期渲染
 - 一个 surface 只能用一个 `catalogId`
@@ -656,7 +724,7 @@ registerCatalogDefinition(
 - 如果你写布局组件，`children` 可能既有字符串数组，也有对象数组
   - 当前仓库已经用 [normalizeChildren.ts](/Users/lee/a2ui-vant-renderer/src/composables/normalizeChildren.ts) 统一处理
 
-## 20. Demo 在哪里
+## 21. Demo 在哪里
 
 可运行 demo：
 
@@ -669,7 +737,7 @@ registerCatalogDefinition(
 - [examples/client/src/customCatalog.ts](/Users/lee/a2ui-vant-renderer/examples/client/src/customCatalog.ts)
 - [examples/client/src/components/A2UISmartSummary.vue](/Users/lee/a2ui-vant-renderer/examples/client/src/components/A2UISmartSummary.vue)
 
-## 21. 怎么运行
+## 22. 怎么运行
 
 构建主包：
 
@@ -686,7 +754,7 @@ pnpm build
 pnpm dev
 ```
 
-## 22. 现在这个项目适合你拿来做什么
+## 23. 现在这个项目适合你拿来做什么
 
 它现在已经适合：
 
@@ -700,7 +768,7 @@ pnpm dev
 - 一个已经完整覆盖全部 Vant 组件的成品库
 - 一个 spacing / theme / design token 都完全成熟的设计系统
 
-## 23. 给刚接手的人一个最短建议
+## 24. 给刚接手的人一个最短建议
 
 如果你是第一次接手这个项目，不要一上来就大改。
 

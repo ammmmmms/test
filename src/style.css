@@ -1,3 +1,57 @@
+:where(:root) {
+  color-scheme: light dark;
+
+  --a2ui-color-background: light-dark(#eee, #111);
+  --a2ui-color-on-background: light-dark(#333, #eee);
+  --a2ui-color-surface: light-dark(
+    color-mix(in oklab, var(--a2ui-color-background) 85%, white),
+    color-mix(in oklab, var(--a2ui-color-background) 95%, white)
+  );
+  --a2ui-color-on-surface: light-dark(#333, #eee);
+  --a2ui-color-primary: #17e;
+  --a2ui-color-primary-light: color-mix(in oklab, var(--a2ui-color-primary) 85%, white);
+  --a2ui-color-primary-dark: color-mix(in oklab, var(--a2ui-color-primary) 85%, black);
+  --a2ui-color-primary-hover: light-dark(var(--a2ui-color-primary-dark), var(--a2ui-color-primary-light));
+  --a2ui-color-on-primary: #fff;
+  --a2ui-color-secondary: light-dark(#ddd, #333);
+  --a2ui-color-secondary-light: color-mix(in oklab, var(--a2ui-color-secondary) 85%, white);
+  --a2ui-color-secondary-dark: color-mix(in oklab, var(--a2ui-color-secondary) 95%, black);
+  --a2ui-color-secondary-hover: light-dark(var(--a2ui-color-secondary-dark), var(--a2ui-color-secondary-light));
+  --a2ui-color-on-secondary: light-dark(#333, #eee);
+  --a2ui-color-border: light-dark(#ccc, #444);
+  --a2ui-color-input: light-dark(#fff, #2a2a2a);
+  --a2ui-color-on-input: light-dark(#333, #eee);
+
+  --a2ui-border-radius: 0.25rem;
+  --a2ui-border-width: 1px;
+  --a2ui-border: 1px solid var(--a2ui-color-border, #ccc);
+
+  --a2ui-grid-base: 0.5rem;
+  --a2ui-spacing-xs: calc(var(--a2ui-spacing-s) / 2);
+  --a2ui-spacing-s: calc(var(--a2ui-spacing-m) / 2);
+  --a2ui-spacing-m: var(--a2ui-grid-base);
+  --a2ui-spacing-l: calc(var(--a2ui-spacing-m) * 2);
+  --a2ui-spacing-xl: calc(var(--a2ui-spacing-l) * 2);
+
+  --a2ui-font-family-title: inherit;
+  --a2ui-font-family-monospace: monospace;
+  --a2ui-font-size: 1rem;
+  --a2ui-font-scale: 1.2;
+  --a2ui-font-size-xs: calc(var(--a2ui-font-size-s) / var(--a2ui-font-scale));
+  --a2ui-font-size-s: calc(var(--a2ui-font-size-m) / var(--a2ui-font-scale));
+  --a2ui-font-size-m: var(--a2ui-font-size);
+  --a2ui-font-size-l: calc(var(--a2ui-font-size-m) * var(--a2ui-font-scale));
+  --a2ui-font-size-xl: calc(var(--a2ui-font-size-l) * var(--a2ui-font-scale));
+  --a2ui-font-size-2xl: calc(var(--a2ui-font-size-xl) * var(--a2ui-font-scale));
+  --a2ui-line-height-headings: 1.2;
+  --a2ui-line-height-body: 1.5;
+
+  --a2ui-text-color-text: var(--a2ui-color-on-background);
+  --a2ui-text-caption-color: light-dark(#666, #aaa);
+  --a2ui-text-a-color: inherit;
+  --a2ui-text-a-font-weight: inherit;
+}
+
 html, body, #app {
   width: 100%;
   height: 100%;
@@ -6,15 +60,15 @@ html, body, #app {
 }
 
 .a2ui-provider {
-  background: var(--a2ui-background-color, #f7f8fa);
-  color: #111827;
+  background: var(--a2ui-color-background);
+  color: var(--a2ui-color-on-background);
 }
 
 .a2ui-row,
 .a2ui-column,
 .a2ui-list {
   display: flex;
-  gap: 12px;
+  gap: var(--a2ui-spacing-l);
 }
 
 .a2ui-row {
@@ -54,7 +108,15 @@ html, body, #app {
 
 .a2ui-card,
 .a2ui-modal-content {
-  padding: 12px;
+  padding: var(--a2ui-spacing-l);
+  background: var(--a2ui-color-surface);
+  color: var(--a2ui-color-on-surface);
+  border: var(--a2ui-border);
+  border-radius: var(--a2ui-border-radius);
+}
+
+.a2ui-row--clickable {
+  cursor: pointer;
 }
 
 .a2ui-button {
@@ -70,42 +132,84 @@ html, body, #app {
 }
 
 .a2ui-button--primary.van-button {
-  background: var(--a2ui-primary-color, #2563eb);
-  border-color: var(--a2ui-primary-color, #2563eb);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--a2ui-primary-color, #2563eb) 28%, transparent);
+  background: var(--a2ui-color-primary);
+  border-color: var(--a2ui-color-primary);
+  color: var(--a2ui-color-on-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--a2ui-color-primary) 28%, transparent);
 }
 
 .a2ui-button--primary.van-button.van-button--plain {
-  color: var(--a2ui-primary-color, #2563eb);
-  background: color-mix(in srgb, var(--a2ui-primary-color, #2563eb) 8%, white);
-  border-color: var(--a2ui-primary-color, #2563eb);
+  color: var(--a2ui-color-primary);
+  background: color-mix(in srgb, var(--a2ui-color-primary) 8%, white);
+  border-color: var(--a2ui-color-primary);
   box-shadow: none;
 }
 
 .a2ui-divider {
-  height: 1px;
-  background: #e5e7eb;
+  height: var(--a2ui-border-width);
+  background: var(--a2ui-color-border);
   width: 100%;
 }
 
-.a2ui-text--h1 { font-size: 28px; font-weight: 700; }
-.a2ui-text--h2 { font-size: 24px; font-weight: 700; }
-.a2ui-text--h3 { font-size: 20px; font-weight: 600; }
-.a2ui-text--h4 { font-size: 18px; font-weight: 600; }
-.a2ui-text--h5 { font-size: 16px; font-weight: 600; }
-.a2ui-text--caption { font-size: 12px; color: #6b7280; }
-.a2ui-text--body { font-size: 14px; }
+.a2ui-text {
+  color: var(--_a2ui-text-color, var(--a2ui-text-color-text, var(--a2ui-color-on-background)));
+}
+
+.a2ui-text p,
+.a2ui-text h1,
+.a2ui-text h2,
+.a2ui-text h3,
+.a2ui-text h4,
+.a2ui-text h5,
+.a2ui-text h6,
+.a2ui-text ol,
+.a2ui-text ul,
+.a2ui-text li,
+.a2ui-text blockquote,
+.a2ui-text pre {
+  margin: var(--_a2ui-text-margin, 0);
+}
+
+.a2ui-text a {
+  color: var(--a2ui-text-a-color, inherit);
+  font-weight: var(--a2ui-text-a-font-weight, inherit);
+}
+
+.a2ui-text--h1,
+.a2ui-text--h2,
+.a2ui-text--h3,
+.a2ui-text--h4,
+.a2ui-text--h5 {
+  font-family: var(--a2ui-font-family-title, inherit);
+  line-height: var(--a2ui-line-height-headings, 1.2);
+}
+
+.a2ui-text--h1 { font-size: var(--a2ui-font-size-2xl); font-weight: 700; }
+.a2ui-text--h2 { font-size: var(--a2ui-font-size-xl); font-weight: 700; }
+.a2ui-text--h3 { font-size: var(--a2ui-font-size-l); font-weight: 600; }
+.a2ui-text--h4 { font-size: var(--a2ui-font-size-m); font-weight: 600; }
+.a2ui-text--h5 { font-size: var(--a2ui-font-size-s); font-weight: 600; }
+.a2ui-text--caption {
+  font-size: var(--a2ui-font-size-xs);
+  line-height: var(--a2ui-line-height-body, 1.5);
+  color: var(--a2ui-text-caption-color, light-dark(#666, #aaa));
+}
+.a2ui-text--body {
+  font-size: var(--a2ui-font-size-m);
+  line-height: var(--a2ui-line-height-body, 1.5);
+}
 
 .a2ui-field-label {
-  font-size: 14px;
+  font-size: var(--a2ui-font-size-m);
   font-weight: 600;
-  margin-bottom: 8px;
+  color: var(--a2ui-color-on-surface);
+  margin-bottom: var(--a2ui-spacing-m);
 }
 
 .a2ui-choice-picker {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--a2ui-spacing-m);
 }
 
 .a2ui-media {
