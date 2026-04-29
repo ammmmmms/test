@@ -51,6 +51,19 @@
   --a2ui-text-caption-color: #666;
   --a2ui-text-a-color: inherit;
   --a2ui-text-a-font-weight: inherit;
+
+  --van-primary-color: var(--a2ui-color-primary);
+  --van-success-color: var(--a2ui-color-primary);
+  --van-warning-color: #f59e0b;
+  --van-danger-color: #ef4444;
+  --van-text-color: var(--a2ui-color-on-background);
+  --van-text-color-2: color-mix(in srgb, var(--a2ui-color-on-background) 70%, transparent);
+  --van-border-color: var(--a2ui-color-border);
+  --van-background: var(--a2ui-color-background);
+  --van-background-2: var(--a2ui-color-surface);
+  --van-radius-sm: var(--a2ui-border-radius);
+  --van-radius-md: var(--a2ui-border-radius);
+  --van-radius-lg: var(--a2ui-border-radius);
 }
 
 :where(.a2ui-dark) {

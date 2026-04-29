@@ -3,10 +3,12 @@ import {
   ActionSchema,
   CheckableSchema,
   ChildListSchema,
+  DataBindingSchema,
   DynamicBooleanSchema,
   DynamicNumberSchema,
   DynamicStringSchema,
   DynamicStringListSchema,
+  FunctionCallSchema,
   type ComponentApi,
   type FunctionImplementation,
 } from '@a2ui/web_core/v0_9';
@@ -51,9 +53,13 @@ export const VantIconApi = {
     .object({
       ...CommonProps,
       name: z
-        .enum(VANT_ICON_NAMES)
+        .union([
+          z.enum(VANT_ICON_NAMES),
+          DataBindingSchema,
+          FunctionCallSchema,
+        ])
         .describe(
-          'The Vant icon name, e.g. success, warning, setting-o, arrow-left.',
+          `The Vant icon name. Literal values should come from the VANT_ICON_NAMES list, for example success, warning-o, setting-o or arrow-left. Path bindings and function calls are also supported.`,
         ),
       size: DynamicNumberSchema.optional(),
       type: z
