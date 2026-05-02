@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, watchEffect } from 'vue';
   import { Button as VanButton, NoticeBar as VanNoticeBar } from 'vant';
-  import { Catalog, MessageProcessor, type A2uiClientAction } from '@a2ui/web_core/v0_9';
+  import { Catalog, MessageProcessor, type A2uiClientAction, type A2uiMessage } from '@a2ui/web_core/v0_9';
   import {
     A2UIProvider,
     BASIC_CATALOG_ID,
@@ -18,11 +18,23 @@
   } from '@demo-renderer';
   import { SmartSummaryApi } from './customCatalog';
   type DemoMode = 'basic' | 'vant';
+  type DeliveryMode = 'instant' | 'stream';
 
   const mode = ref<DemoMode>('vant');
+  const deliveryMode = ref<DeliveryMode>('stream');
   const surfaceId = 'demo-surface';
   const actionLog = ref<string[]>([]);
-console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_ID))
+  const streamState = ref('Idle');
+  let streamTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const clearStreamTimer = () => {
+    if (streamTimer) {
+      clearTimeout(streamTimer);
+      streamTimer = null;
+    }
+  };
+
+  console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_ID))
   const processor = ref(
     new MessageProcessor(
       [
@@ -52,8 +64,291 @@ console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_I
     mode.value === 'basic' ? BASIC_CATALOG_ID : VANT_CATALOG_ID,
   );
 
+  const demoTitle = computed(() =>
+    deliveryMode.value === 'stream' ? 'Streaming delivery enabled' : 'All messages delivered at once',
+  );
+
+  const getBasicMessages = (): A2uiMessage[] => ([
+    {
+      version: 'v0.9',
+      createSurface: {
+        surfaceId,
+        catalogId: BASIC_CATALOG_ID,
+        theme: {
+          colorPrimary: '#2563eb',
+          colorBackground: '#f8fafc',
+          colorSurface: '#ffffff',
+        },
+        sendDataModel: true,
+      },
+    },
+    {
+      version: 'v0.9',
+      updateDataModel: {
+        surfaceId,
+        value: {
+          profile: {
+            name: 'Lee',
+            role: 'Product Engineer',
+            summary: 'Editing Lee (Product Engineer)',
+            status: 'Change the display name, then blur the field or press save.',
+          },
+        },
+      },
+    },
+    {
+      version: 'v0.9',
+      updateComponents: {
+        surfaceId,
+        components: [
+          { id: 'root', component: 'Card', child: 'content' },
+          { id: 'content', component: 'Column', children: ['title', 'subtitle', 'hint', 'input', 'submit'] },
+          { id: 'title', component: 'Text', text: 'Basic Catalog Demo', variant: 'h3' },
+          { id: 'subtitle', component: 'Text', text: { path: '/profile/summary' } },
+          { id: 'hint', component: 'Text', text: { path: '/profile/status' }, variant: 'caption' },
+          {
+            id: 'input',
+            component: 'TextField',
+            label: 'Display Name',
+            value: { path: '/profile/name' },
+            action: {
+              event: {
+                name: 'name_blur',
+                context: { name: { path: '/profile/name' } },
+              },
+            },
+          },
+          {
+            id: 'submit',
+            component: 'Button',
+            child: 'submit-label',
+            variant: 'primary',
+            action: {
+              event: {
+                name: 'save_profile',
+                context: {
+                  name: { path: '/profile/name' },
+                  role: { path: '/profile/role' },
+                },
+              },
+            },
+          },
+          { id: 'submit-label', component: 'Text', text: 'Save Profile' },
+        ],
+      },
+    },
+  ]);
+
+  const getVantMessages = (): A2uiMessage[] => ([
+    {
+      version: 'v0.9',
+      createSurface: {
+        surfaceId,
+        catalogId: VANT_CATALOG_ID,
+        theme: {
+          colorPrimary: '#14b8a6',
+          colorBackground: '#f0fdfa',
+          colorSurface: '#ffffff',
+        },
+        sendDataModel: true,
+      },
+    },
+    {
+      version: 'v0.9',
+      updateDataModel: {
+        surfaceId,
+        value: {
+          order: {
+            note: 'Less ice',
+            topping: 'Pearls',
+            sweetness: 60,
+            summary: 'Pearls, 60% sweet, less ice',
+            syncedSummary: '',
+          },
+        },
+      },
+    },
+    {
+      version: 'v0.9',
+      updateComponents: {
+        surfaceId,
+        components: [
+          { id: 'root', component: 'Column', children: ['hero-card', 'builder-group', 'summary-card', 'cta-card', 'stream-card'] },
+          { id: 'hero-card', component: 'Card', child: 'hero-content' },
+          { id: 'hero-content', component: 'Column', children: ['tag', 'icon-row', 'preview'] },
+          { id: 'tag', component: 'Tag', text: 'Mobile Catalog', type: 'success' },
+          {
+            id: 'icon-row',
+            component: 'Row',
+            align: 'center',
+            children: ['icon-primary', 'icon-warning', 'icon-default'],
+          },
+          {
+            id: 'icon-primary',
+            component: 'Icon',
+            name: 'success',
+            size: 20,
+            type: 'primary',
+          },
+          {
+            id: 'icon-warning',
+            component: 'Icon',
+            name: 'warning-o',
+            size: 24,
+            type: 'warning',
+          },
+          {
+            id: 'icon-default',
+            component: 'Icon',
+            name: 'setting-o',
+            size: 18,
+            type: 'default',
+          },
+          { id: 'preview', component: 'Text', text: { path: '/order/summary' }, variant: 'caption' },
+          { id: 'builder-group', component: 'CellGroup', title: 'Bubble Tea Builder', inset: true, children: ['note', 'picker', 'sweetness'] },
+          {
+            id: 'note',
+            component: 'TextField',
+            label: 'Order Note',
+            placeholder: 'No ice / less sugar / extra tea',
+            value: { path: '/order/note' },
+            action: {
+              event: {
+                name: 'note_blur',
+                context: {
+                  note: { path: '/order/note' },
+                },
+              },
+            },
+          },
+          {
+            id: 'picker',
+            component: 'ChoicePicker',
+            label: 'Topping',
+            options: ['Pearls', 'Coconut Jelly', 'Pudding'],
+            value: { path: '/order/topping' },
+            variant: 'mutuallyExclusive',
+            displayStyle: 'list',
+          },
+          {
+            id: 'sweetness',
+            component: 'Slider',
+            value: { path: '/order/sweetness' },
+            min: 0,
+            max: 100,
+            step: 10,
+          },
+          { id: 'summary-card', component: 'Card', child: 'summary-content' },
+          { id: 'summary-content', component: 'Column', children: ['smart-summary', 'synced-summary'] },
+          {
+            id: 'smart-summary',
+            component: 'SmartSummary',
+            title: 'useA2UI Example',
+            ctaText: 'Build Custom Summary',
+            paths: ['/order/note', '/order/topping', '/order/sweetness'],
+            labels: ['Note', 'Topping', 'Sweetness'],
+            persistTo: '/order/syncedSummary',
+            action: {
+              event: {
+                name: 'sync_summary',
+                context: {
+                  synced: { path: '/order/syncedSummary' },
+                },
+              },
+            },
+          },
+          { id: 'synced-summary', component: 'Text', text: { path: '/order/syncedSummary' }, variant: 'caption' },
+          { id: 'cta-card', component: 'Card', child: 'cta' },
+          {
+            id: 'cta',
+            component: 'Button',
+            child: 'cta-label',
+            variant: 'primary',
+            block: true,
+            action: {
+              event: {
+                name: 'submit_order',
+                context: {
+                  note: { path: '/order/note' },
+                  topping: { path: '/order/topping' },
+                  sweetness: { path: '/order/sweetness' },
+                },
+              },
+            },
+          },
+          { id: 'cta-label', component: 'Text', text: 'Submit Order' },
+          { id: 'stream-card', component: 'Card', child: 'stream-content' },
+          { id: 'stream-content', component: 'Column', children: ['stream-title', 'stream-body'] },
+          { id: 'stream-title', component: 'Text', text: 'Streaming tail', variant: 'h4' },
+          { id: 'stream-body', component: 'Text', text: 'This block was appended in a later component batch.', variant: 'caption' },
+        ],
+      },
+    },
+  ]);
+
+  const buildStreamBatches = (messages: A2uiMessage[]) => {
+    const componentPayload = messages[2];
+
+    return [
+      [messages[0]],
+      [messages[1]],
+      [
+        {
+          version: 'v0.9',
+          updateComponents: {
+            surfaceId,
+            components: componentPayload.updateComponents?.components.slice(0, 4) ?? [],
+          },
+        },
+      ],
+      [
+        {
+          version: 'v0.9',
+          updateComponents: {
+            surfaceId,
+            components: componentPayload.updateComponents?.components.slice(4, 14) ?? [],
+          },
+        },
+      ],
+      [
+        {
+          version: 'v0.9',
+          updateComponents: {
+            surfaceId,
+            components: componentPayload.updateComponents?.components.slice(14) ?? [],
+          },
+        },
+      ],
+    ];
+  };
+
+  const runStreamingDemo = (nextProcessor: MessageProcessor, messages: A2uiMessage[]) => {
+    clearStreamTimer();
+
+    const batches = buildStreamBatches(messages);
+    let index = 0;
+
+    const flushNextBatch = () => {
+      const batch = batches[index];
+      if (!batch) {
+        streamState.value = 'Streaming complete';
+        streamTimer = null;
+        return;
+      }
+
+      streamState.value = `Streaming batch ${index + 1} / ${batches.length}`;
+      nextProcessor.processMessages(batch);
+      index += 1;
+      streamTimer = setTimeout(flushNextBatch, 1000);
+    };
+
+    flushNextBatch();
+  };
+
   const loadDemo = (selectedMode: DemoMode) => {
+    clearStreamTimer();
     actionLog.value = [];
+    streamState.value = deliveryMode.value === 'stream' ? 'Preparing stream' : 'Delivered instantly';
 
     const nextProcessor = new MessageProcessor(
       [
@@ -78,223 +373,15 @@ console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_I
       },
     );
 
-    if (selectedMode === 'basic') {
-      nextProcessor.processMessages([
-        {
-          version: 'v0.9',
-          createSurface: {
-            surfaceId,
-            catalogId: BASIC_CATALOG_ID,
-            theme: {
-              primaryColor: '#2563eb',
-              backgroundColor: '#f8fafc',
-              surfaceColor: '#ffffff',
-            },
-            sendDataModel: true,
-          },
-        },
-        {
-          version: 'v0.9',
-          updateDataModel: {
-            surfaceId,
-            value: {
-              profile: {
-                name: 'Lee',
-                role: 'Product Engineer',
-                summary: 'Editing Lee (Product Engineer)',
-                status: 'Change the display name, then blur the field or press save.',
-              },
-            },
-          },
-        },
-        {
-          version: 'v0.9',
-          updateComponents: {
-            surfaceId,
-            components: [
-              { id: 'root', component: 'Card', child: 'content' },
-              { id: 'content', component: 'Column', children: ['title', 'subtitle', 'hint', 'input', 'submit'] },
-              { id: 'title', component: 'Text', text: 'Basic Catalog Demo', variant: 'h3' },
-              { id: 'subtitle', component: 'Text', text: { path: '/profile/summary' } },
-              { id: 'hint', component: 'Text', text: { path: '/profile/status' }, variant: 'caption' },
-              {
-                id: 'input',
-                component: 'TextField',
-                label: 'Display Name',
-                value: { path: '/profile/name' },
-                action: {
-                  event: {
-                    name: 'name_blur',
-                    context: { name: { path: '/profile/name' } },
-                  },
-                },
-              },
-              {
-                id: 'submit',
-                component: 'Button',
-                child: 'submit-label',
-                variant: 'primary',
-                action: {
-                  event: {
-                    name: 'save_profile',
-                    context: {
-                      name: { path: '/profile/name' },
-                      role: { path: '/profile/role' },
-                    },
-                  },
-                },
-              },
-              { id: 'submit-label', component: 'Text', text: 'Save Profile' },
-            ],
-          },
-        },
-      ]);
-    } else {
-      nextProcessor.processMessages([
-        {
-          version: 'v0.9',
-          createSurface: {
-            surfaceId,
-            catalogId: VANT_CATALOG_ID,
-            theme: {
-              primaryColor: '#14b8a6',
-              backgroundColor: '#f0fdfa',
-              surfaceColor: '#ffffff',
-            },
-            sendDataModel: true,
-          },
-        },
-        {
-          version: 'v0.9',
-          updateDataModel: {
-            surfaceId,
-            value: {
-              order: {
-                note: 'Less ice',
-                topping: 'Pearls',
-                sweetness: 60,
-                summary: 'Pearls, 60% sweet, less ice',
-                syncedSummary: '',
-              },
-            },
-          },
-        },
-        {
-          version: 'v0.9',
-          updateComponents: {
-            surfaceId,
-            components: [
-              { id: 'root', component: 'Column', children: ['hero-card', 'builder-group', 'summary-card', 'cta-card'] },
-              { id: 'hero-card', component: 'Card', child: 'hero-content' },
-              { id: 'hero-content', component: 'Column', children: ['tag', 'icon-row', 'preview'] },
-              { id: 'tag', component: 'Tag', text: 'Mobile Catalog', type: 'success' },
-              {
-                id: 'icon-row',
-                component: 'Row',
-                align: 'center',
-                children: ['icon-primary', 'icon-warning', 'icon-default'],
-              },
-              {
-                id: 'icon-primary',
-                component: 'Icon',
-                name: 'success',
-                size: 20,
-                type: 'primary',
-              },
-              {
-                id: 'icon-warning',
-                component: 'Icon',
-                name: 'warning-o',
-                size: 24,
-                type: 'warning',
-              },
-              {
-                id: 'icon-default',
-                component: 'Icon',
-                name: 'setting-o',
-                size: 18,
-                type: 'default',
-              },
-              { id: 'preview', component: 'Text', text: { path: '/order/summary' }, variant: 'caption' },
-              { id: 'builder-group', component: 'CellGroup', title: 'Bubble Tea Builder', inset: true, children: ['note', 'picker', 'sweetness'] },
-              {
-                id: 'note',
-                component: 'TextField',
-                label: 'Order Note',
-                placeholder: 'No ice / less sugar / extra tea',
-                value: { path: '/order/note' },
-                action: {
-                  event: {
-                    name: 'note_blur',
-                    context: {
-                      note: { path: '/order/note' },
-                    },
-                  },
-                },
-              },
-              {
-                id: 'picker',
-                component: 'ChoicePicker',
-                label: 'Topping',
-                options: ['Pearls', 'Coconut Jelly', 'Pudding'],
-                value: { path: '/order/topping' },
-                variant: 'mutuallyExclusive',
-                displayStyle: 'list',
-              },
-              {
-                id: 'sweetness',
-                component: 'Slider',
-                value: { path: '/order/sweetness' },
-                min: 0,
-                max: 100,
-                step: 10,
-              },
-              { id: 'summary-card', component: 'Card', child: 'summary-content' },
-              { id: 'summary-content', component: 'Column', children: ['smart-summary', 'synced-summary'] },
-              {
-                id: 'smart-summary',
-                component: 'SmartSummary',
-                title: 'useA2UI Example',
-                ctaText: 'Build Custom Summary',
-                paths: ['/order/note', '/order/topping', '/order/sweetness'],
-                labels: ['Note', 'Topping', 'Sweetness'],
-                persistTo: '/order/syncedSummary',
-                action: {
-                  event: {
-                    name: 'sync_summary',
-                    context: {
-                      synced: { path: '/order/syncedSummary' },
-                    },
-                  },
-                },
-              },
-              { id: 'synced-summary', component: 'Text', text: { path: '/order/syncedSummary' }, variant: 'caption' },
-              { id: 'cta-card', component: 'Card', child: 'cta' },
-              {
-                id: 'cta',
-                component: 'Button',
-                child: 'cta-label',
-                variant: 'primary',
-                block: true,
-                action: {
-                  event: {
-                    name: 'submit_order',
-                    context: {
-                      note: { path: '/order/note' },
-                      topping: { path: '/order/topping' },
-                      sweetness: { path: '/order/sweetness' },
-                    },
-                  },
-                },
-              },
-              { id: 'cta-label', component: 'Text', text: 'Submit Order' },
-            ],
-          },
-        },
-      ]);
+    processor.value = nextProcessor;
+
+    const messages = selectedMode === 'basic' ? getBasicMessages() : getVantMessages();
+    if (deliveryMode.value === 'stream') {
+      runStreamingDemo(nextProcessor, messages);
+      return;
     }
 
-    processor.value = nextProcessor;
+    nextProcessor.processMessages(messages);
   };
 
   watchEffect(() => {
@@ -322,12 +409,24 @@ console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_I
         >
           Vant
         </VanButton>
+        <VanButton
+          :type="deliveryMode === 'instant' ? 'primary' : 'default'"
+          @click="deliveryMode = 'instant'"
+        >
+          Instant
+        </VanButton>
+        <VanButton
+          :type="deliveryMode === 'stream' ? 'primary' : 'default'"
+          @click="deliveryMode = 'stream'"
+        >
+          Stream
+        </VanButton>
       </div>
     </header>
 
     <VanNoticeBar
       left-icon="info-o"
-      :text="`Current catalog: ${currentCatalogId}`"
+      :text="`Current catalog: ${currentCatalogId} · ${demoTitle} · ${streamState}`"
     />
 
     <main class="demo-grid">

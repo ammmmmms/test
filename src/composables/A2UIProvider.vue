@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, shallowRef, onMounted, onUnmounted } from 'vue';
+  import { computed, provide, shallowRef, watch } from 'vue';
   import { A2UI_CONTEXT_KEY } from './useA2UI';
 
   const props = defineProps<{
@@ -8,25 +8,81 @@
     onAction?: (action: any) => void;
   }>();
 
-  const updateKey = shallowRef(0);
+  type Unsubscribable = { unsubscribe: () => void };
 
-  const handleUpdate = () => {
-    updateKey.value++;
+  const renderVersion = shallowRef(0);
+
+  const bumpRenderVersion = () => {
+    renderVersion.value++;
   };
 
-  onMounted(() => {
-    if (typeof props.processor?.addEventListener === 'function') {
-      props.processor.addEventListener('update', handleUpdate);
-    }
+  const surface = computed(() => {
+    renderVersion.value;
+    return props.processor?.model?.getSurface(props.surfaceId);
   });
 
-  onUnmounted(() => {
-    if (typeof props.processor?.removeEventListener === 'function') {
-      props.processor.removeEventListener('update', handleUpdate);
-    }
-  });
+  watch(
+    () => [props.processor, props.surfaceId] as const,
+    ([processor, surfaceId], _previous, onCleanup) => {
+      const subscriptions: Unsubscribable[] = [];
+      let componentSubscriptions: Unsubscribable[] = [];
 
-  const surface = computed(() => props.processor?.model?.getSurface(props.surfaceId));
+      const cleanupComponentSubscriptions = () => {
+        for (const subscription of componentSubscriptions) {
+          subscription.unsubscribe();
+        }
+        componentSubscriptions = [];
+      };
+
+      const attachSurfaceSubscriptions = (nextSurface: any) => {
+        cleanupComponentSubscriptions();
+
+        if (!nextSurface || nextSurface.id !== surfaceId) {
+          return;
+        }
+
+        componentSubscriptions = [
+          nextSurface.componentsModel.onCreated.subscribe(() => {
+            bumpRenderVersion();
+          }),
+          nextSurface.componentsModel.onDeleted.subscribe(() => {
+            bumpRenderVersion();
+          }),
+        ];
+      };
+
+      if (typeof processor?.onSurfaceCreated === 'function') {
+        subscriptions.push(
+          processor.onSurfaceCreated((createdSurface: any) => {
+            if (createdSurface.id !== surfaceId) return;
+            attachSurfaceSubscriptions(createdSurface);
+            bumpRenderVersion();
+          }),
+        );
+      }
+
+      if (typeof processor?.onSurfaceDeleted === 'function') {
+        subscriptions.push(
+          processor.onSurfaceDeleted((deletedSurfaceId: string) => {
+            if (deletedSurfaceId !== surfaceId) return;
+            cleanupComponentSubscriptions();
+            bumpRenderVersion();
+          }),
+        );
+      }
+
+      attachSurfaceSubscriptions(processor?.model?.getSurface(surfaceId));
+      bumpRenderVersion();
+
+      onCleanup(() => {
+        cleanupComponentSubscriptions();
+        for (const subscription of subscriptions) {
+          subscription.unsubscribe();
+        }
+      });
+    },
+    { immediate: true },
+  );
   const themeStyle = computed<Record<string, string>>(() => {
     const theme = surface.value?.theme ?? {};
     const styles: Record<string, string | undefined> = {
@@ -74,7 +130,7 @@
 
 <template>
   <div
-    :key="updateKey"
+    :key="renderVersion"
     class="a2ui-provider"
     :style="themeStyle"
   >

@@ -90,7 +90,7 @@
 .a2ui-light {
   color-scheme: light;
 }
-
+/* 
 @media (prefers-color-scheme: dark) {
   :root:not(.a2ui-light):not(.a2ui-dark) {
     color-scheme: dark;
@@ -112,7 +112,7 @@
     --a2ui-color-on-input: #eee;
     --a2ui-text-caption-color: #aaa;
   }
-}
+} */
 
 html, body, #app {
   width: 100%;
@@ -252,7 +252,7 @@ html, body, #app {
 .a2ui-text--h4 { font-size: var(--a2ui-font-size-m); font-weight: 600; }
 .a2ui-text--h5 { font-size: var(--a2ui-font-size-s); font-weight: 600; }
 .a2ui-text--caption {
-  font-size: var(--a2ui-font-size-xs);
+  font-size: var(--a2ui-font-size-m);
   line-height: var(--a2ui-line-height-body, 1.5);
   color: var(--a2ui-text-caption-color, #666);
 }

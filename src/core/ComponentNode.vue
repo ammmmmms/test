@@ -37,15 +37,14 @@
     return node.value?.type;
   });
 
-  const layoutClasses = computed(() => {
+  const layoutStyle = computed(() => {
     if (!node.value) return {};
     const weight = node.value.properties.weight;
 
-    const classes: Record<string, boolean> = {};
     if (typeof weight === 'number') {
-      classes[`flex-grow-${weight}`] = true;
+      return ({ flexGrow: weight });
     }
-    return classes;
+    return {};
   });
 
   const resolvedComponent = computed(() => {
@@ -60,23 +59,16 @@
       v-if="resolvedComponent"
       :is="resolvedComponent"
       :node="node"
-      :class="layoutClasses"
+      :style="layoutStyle"
     />
     <div
       v-else
       class="a2ui-error-fallback"
       style="color: red; border: 1px solid red; padding: 4px"
-      :class="layoutClasses"
+      :style="layoutStyle"
     >
       Unknown component type: {{ componentType }}
     </div>
   </template>
-  <div
-    v-else
-    style="border: 2px solid orange; color: orange; padding: 10px"
-  >
-    Missing node: {{ id }}
-    <pre style="font-size: 10px">Surface exists: {{ !!context?.processor?.model?.getSurface(context.surfaceId) }}</pre>
-    <pre style="font-size: 10px">Component keys: {{ Array.from(context?.processor?.model?.getSurface(context.surfaceId)?.componentsModel?.['components']?.keys() || []) }}</pre>
-  </div>
+  <template v-else />
 </template>
