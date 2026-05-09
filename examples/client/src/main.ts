@@ -9,7 +9,7 @@ import {
 } from './customCatalog';
 
 createApp(App)
-  .use(A2UiVueRenderer, {
+  .use(A2UiVueRenderer as any, {
     registerBasicCatalog: true,
     registerVantCatalog: true,
     catalogs: [
