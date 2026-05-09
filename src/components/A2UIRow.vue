@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
+  import type { CSSProperties } from 'vue';
   import { computed, toRef } from 'vue';
   import { VantRowApi } from '../catalog/vant-components';
   import ComponentNode from '../core/ComponentNode.vue';
@@ -15,9 +16,14 @@
   const justify = computed(() => boundProps.value.justify ?? 'start');
   const align = computed(() => boundProps.value.align ?? 'stretch');
   const clickable = computed(() => !!boundProps.value.action);
+  const rowStyle = computed<CSSProperties>(() => {
+    const gap = Number(boundProps.value.gap);
+    return Number.isFinite(gap) && gap >= 0 ? { gap: `${gap}px` } : {};
+  });
 
-  const onClick = () => {
+  const onClick = (event: MouseEvent) => {
     if (!clickable.value) return;
+    event.stopPropagation();
     dispatchNodeAction(props.node);
   };
 </script>
@@ -28,6 +34,7 @@
     :data-justify="justify"
     :data-align="align"
     :class="{ 'a2ui-row--clickable': clickable }"
+    :style="rowStyle"
     @click="onClick"
   >
     <ComponentNode

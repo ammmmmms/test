@@ -16,6 +16,8 @@ import {
   BASIC_COMPONENTS,
   BASIC_FUNCTIONS,
   CardApi,
+  ColumnApi,
+  ListApi,
   RowApi,
   TextApi,
 } from '@a2ui/web_core/v0_9/basic_catalog';
@@ -76,6 +78,21 @@ export const VantRowApi = {
   name: 'Row',
   schema: RowApi.schema.extend({
     action: ActionSchema.optional(),
+    gap: DynamicNumberSchema.optional(),
+  }),
+} satisfies ComponentApi;
+
+export const VantColumnApi = {
+  name: 'Column',
+  schema: ColumnApi.schema.extend({
+    gap: DynamicNumberSchema.optional(),
+  }),
+} satisfies ComponentApi;
+
+export const VantListApi = {
+  name: 'List',
+  schema: ListApi.schema.extend({
+    gap: DynamicNumberSchema.optional(),
   }),
 } satisfies ComponentApi;
 
@@ -227,6 +244,8 @@ const overrideNames = new Set([
   'Card',
   'Icon',
   'Row',
+  'Column',
+  'List',
   'Text',
   'Button',
   'TextField',
@@ -245,6 +264,8 @@ const baseComponents = BASIC_COMPONENTS.filter(
 export const VANT_COMPONENTS_LIST: ComponentApi[] = [
   ...baseComponents,
   VantCardApi,
+  VantColumnApi,
+  VantListApi,
   VantTextApi,
   CellGroupApi,
   TagApi,

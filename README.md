@@ -696,6 +696,10 @@ registerCatalogDefinition(
   - `caption` 会走 `@a2ui/markdown-it` 的 `renderMarkdown`
   - 支持 `style` 内联样式对象
   - 支持 `lines`，超出指定行数后省略
+- `Row / Column`
+  - 支持 `gap`，传数字，运行时按 `px` 处理
+- `List`
+  - 支持 `gap`，传数字，运行时按 `px` 处理
   - 其他 `variant` 仍然按类名区分样式
 
 如果你继续扩 `vant catalog`，建议：

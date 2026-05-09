@@ -10,7 +10,6 @@
   const { boundProps } = useBoundProps(toRef(props, 'node'), VantButtonApi);
 
   const childId = computed(() => boundProps.value.child);
-  const hhhh = computed(() => boundProps.value.hhhh);
   const label = computed(() => {
     return boundProps.value.label ?? boundProps.value.text ?? '';
   });
@@ -33,6 +32,11 @@
     const variant = boundProps.value.variant ?? 'default';
     return `a2ui-button--${variant}`;
   });
+  const onClick = (event: MouseEvent) => {
+    if (!boundProps.value.action) return;
+    event.stopPropagation();
+    boundProps.value.action();
+  };
 </script>
 
 <template>
@@ -42,12 +46,12 @@
     :type="type"
     :plain="plain"
     :block="block"
-    @click="boundProps.action?.()"
+    @click="onClick"
   >
     <ComponentNode
       v-if="childId"
       :id="childId"
     />
-    <template v-else>{{ label || hhhh }}</template>
+    <template v-else>{{ label }}</template>
   </VanButton>
 </template>
