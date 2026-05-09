@@ -16,7 +16,7 @@ const props = defineProps<{ node: ComponentModel }>();
   });
   const size = computed(() => {
     const raw = boundProps.value.size;
-    return typeof raw === 'number' ? raw : undefined;
+    return typeof raw === 'number' ? raw : 20;
   });
   const color = computed(() => {
     const type = boundProps.value.type as VantIconType | undefined || 'primary';
