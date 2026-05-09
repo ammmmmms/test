@@ -17,7 +17,7 @@
     defaultRegistry
   } from '@demo-renderer';
   import { SmartSummaryApi } from './customCatalog';
-  type DemoMode = 'basic' | 'vant';
+  type DemoMode = 'basic' | 'vant' | 'list';
   type DeliveryMode = 'instant' | 'stream';
 
   const mode = ref<DemoMode>('vant');
@@ -286,6 +286,145 @@
     },
   ]);
 
+  const getListMessages = (): A2uiMessage[] => ([
+    {
+      version: 'v0.9',
+      createSurface: {
+        surfaceId,
+        catalogId: VANT_CATALOG_ID,
+        theme: {
+          colorPrimary: '#0f766e',
+          colorBackground: '#f8fafc',
+          colorSurface: '#ffffff',
+          colorOnBackground: '#0f172a',
+          colorBorder: '#dbe4ee',
+        },
+        sendDataModel: true,
+      },
+    },
+    {
+      version: 'v0.9',
+      updateDataModel: {
+        surfaceId,
+        value: {
+          products: [
+            {
+              id: 'coffee-latte',
+              name: '燕麦拿铁',
+              priceText: '¥28',
+              description: '奶香顺滑，适合早餐时段。',
+            },
+            {
+              id: 'coffee-americano',
+              name: '冰美式',
+              priceText: '¥22',
+              description: '口感更干净，偏苦更明显。',
+            },
+            {
+              id: 'coffee-matcha',
+              name: '抹茶拿铁',
+              priceText: '¥32',
+              description: '茶感更重，回甘明显。',
+            },
+          ],
+        },
+      },
+    },
+    {
+      version: 'v0.9',
+      updateComponents: {
+        surfaceId,
+        components: [
+          {
+            id: 'root',
+            component: 'Column',
+            children: ['list-header-card', 'product-list'],
+          },
+          {
+            id: 'list-header-card',
+            component: 'Card',
+            child: 'list-header-content',
+          },
+          {
+            id: 'list-header-content',
+            component: 'Column',
+            children: ['list-title', 'list-hint'],
+          },
+          {
+            id: 'list-title',
+            component: 'Text',
+            text: '数组模板列表示例',
+            variant: 'h3',
+          },
+          {
+            id: 'list-hint',
+            component: 'Text',
+            text: '下面的卡片不是手写三份，而是通过 /products 数组 + componentId 模板重复渲染出来的。',
+            variant: 'caption',
+          },
+          {
+            id: 'product-list',
+            component: 'List',
+            children: {
+              componentId: 'product-card',
+              path: '/products',
+            },
+          },
+          {
+            id: 'product-card',
+            component: 'Card',
+            child: 'product-card-content',
+          },
+          {
+            id: 'product-card-content',
+            component: 'Column',
+            children: ['product-head', 'product-description', 'product-cta'],
+          },
+          {
+            id: 'product-head',
+            component: 'Row',
+            justify: 'spaceBetween',
+            align: 'center',
+            children: ['product-name', 'product-price'],
+          },
+          {
+            id: 'product-name',
+            component: 'Text',
+            text: { path: 'name' },
+            variant: 'h4',
+          },
+          {
+            id: 'product-price',
+            component: 'Text',
+            text: { path: 'priceText' },
+            variant: 'body',
+          },
+          {
+            id: 'product-description',
+            component: 'Text',
+            text: { path: 'description' },
+            variant: 'caption',
+          },
+          {
+            id: 'product-cta',
+            component: 'Button',
+            label: '加入购物车',
+            variant: 'primary',
+            action: {
+              event: {
+                name: 'add_to_cart',
+                context: {
+                  productId: { path: 'id' },
+                  productName: { path: 'name' },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  ]);
+
   const buildStreamBatches = (messages: A2uiMessage[]) => {
     const componentPayload = messages[2];
 
@@ -375,7 +514,11 @@
 
     processor.value = nextProcessor;
 
-    const messages = selectedMode === 'basic' ? getBasicMessages() : getVantMessages();
+    const messages = selectedMode === 'basic'
+      ? getBasicMessages()
+      : selectedMode === 'vant'
+        ? getVantMessages()
+        : getListMessages();
     if (deliveryMode.value === 'stream') {
       runStreamingDemo(nextProcessor, messages);
       return;
@@ -408,6 +551,12 @@
           @click="mode = 'vant'"
         >
           Vant
+        </VanButton>
+        <VanButton
+          :type="mode === 'list' ? 'primary' : 'default'"
+          @click="mode = 'list'"
+        >
+          List
         </VanButton>
         <VanButton
           :type="deliveryMode === 'instant' ? 'primary' : 'default'"
