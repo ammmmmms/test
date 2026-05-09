@@ -15,9 +15,10 @@ import {
 import {
   BASIC_COMPONENTS,
   BASIC_FUNCTIONS,
+  CardApi,
   RowApi,
 } from '@a2ui/web_core/v0_9/basic_catalog';
-import { CommonProps } from './common-props';
+import { CommonProps, InlineStyleSchema } from './common-props';
 import { VANT_ICON_NAMES, VANT_ICON_TYPES } from './vant-icon';
 
 export const CellGroupApi = {
@@ -74,6 +75,13 @@ export const VantRowApi = {
   name: 'Row',
   schema: RowApi.schema.extend({
     action: ActionSchema.optional(),
+  }),
+} satisfies ComponentApi;
+
+export const VantCardApi = {
+  name: 'Card',
+  schema: CardApi.schema.extend({
+    style: InlineStyleSchema.optional(),
   }),
 } satisfies ComponentApi;
 
@@ -207,6 +215,7 @@ export const VantModalApi = {
 } satisfies ComponentApi;
 
 const overrideNames = new Set([
+  'Card',
   'Icon',
   'Row',
   'Button',
@@ -225,6 +234,7 @@ const baseComponents = BASIC_COMPONENTS.filter(
 
 export const VANT_COMPONENTS_LIST: ComponentApi[] = [
   ...baseComponents,
+  VantCardApi,
   CellGroupApi,
   TagApi,
   VantIconApi,
