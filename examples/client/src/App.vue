@@ -19,12 +19,16 @@
   import { SmartSummaryApi } from './customCatalog';
   type DemoMode = 'basic' | 'vant' | 'list';
   type DeliveryMode = 'instant' | 'stream';
+  type PageMode = 'demo' | 'playground';
 
+  const pageMode = ref<PageMode>('demo');
   const mode = ref<DemoMode>('vant');
   const deliveryMode = ref<DeliveryMode>('stream');
   const surfaceId = 'demo-surface';
   const actionLog = ref<string[]>([]);
   const streamState = ref('Idle');
+  const playgroundSurfaceId = ref('playground-surface');
+  const playgroundError = ref('');
   let streamTimer: ReturnType<typeof setTimeout> | null = null;
 
   const clearStreamTimer = () => {
@@ -34,8 +38,7 @@
     }
   };
 
-  console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_ID))
-  const processor = ref(
+  const createProcessor = () =>
     new MessageProcessor(
       [
         new Catalog(
@@ -57,8 +60,11 @@
           ...actionLog.value,
         ].slice(0, 8);
       },
-    ),
-  );
+    );
+
+  console.log('getCatalogSchema', getCatalogSchema(defaultRegistry, VANT_CATALOG_ID))
+  const processor = ref(createProcessor());
+  const playgroundProcessor = ref(createProcessor());
 
   const currentCatalogId = computed(() =>
     mode.value === 'basic' ? BASIC_CATALOG_ID : VANT_CATALOG_ID,
@@ -313,18 +319,30 @@
               name: '燕麦拿铁',
               priceText: '¥28',
               description: '奶香顺滑，适合早餐时段。',
+              tags: [
+                { label: '热销', detail: '近7天销量最高', icon: 'fire-o' },
+                { label: '奶香', detail: '口感更顺滑', icon: 'like-o' },
+              ],
             },
             {
               id: 'coffee-americano',
               name: '冰美式',
               priceText: '¥22',
               description: '口感更干净，偏苦更明显。',
+              tags: [
+                { label: '清爽', detail: '更适合夏天', icon: 'guide-o' },
+                { label: '低糖', detail: '默认不额外加糖', icon: 'passed' },
+              ],
             },
             {
               id: 'coffee-matcha',
               name: '抹茶拿铁',
               priceText: '¥32',
               description: '茶感更重，回甘明显。',
+              tags: [
+                { label: '新品', detail: '本周新上线', icon: 'new-o' },
+                { label: '回甘', detail: '尾调更明显', icon: 'award-o' },
+              ],
             },
           ],
         },
@@ -378,7 +396,7 @@
           {
             id: 'product-card-content',
             component: 'Column',
-            children: ['product-head', 'product-description', 'product-cta'],
+            children: ['product-head', 'product-tags', 'product-description', 'product-cta'],
           },
           {
             id: 'product-head',
@@ -398,6 +416,45 @@
             component: 'Text',
             text: { path: 'priceText' },
             variant: 'body',
+          },
+          {
+            id: 'product-tags',
+            component: 'List',
+            direction: 'horizontal',
+            children: {
+              componentId: 'product-tag-item',
+              path: 'tags',
+            },
+          },
+          {
+            id: 'product-tag-item',
+            component: 'Row',
+            align: 'center',
+            children: ['product-tag-icon', 'product-tag-copy'],
+          },
+          {
+            id: 'product-tag-icon',
+            component: 'Icon',
+            name: { path: 'icon' },
+            size: 14,
+            type: 'primary',
+          },
+          {
+            id: 'product-tag-copy',
+            component: 'Column',
+            children: ['product-tag-label', 'product-tag-detail'],
+          },
+          {
+            id: 'product-tag-label',
+            component: 'Text',
+            text: { path: 'label' },
+            variant: 'body',
+          },
+          {
+            id: 'product-tag-detail',
+            component: 'Text',
+            text: { path: 'detail' },
+            variant: 'caption',
           },
           {
             id: 'product-description',
@@ -424,6 +481,22 @@
       },
     },
   ]);
+
+  const playgroundExamples = computed(() => [
+    {
+      label: '基础表单',
+      value: JSON.stringify(getBasicMessages(), null, 2),
+    },
+    {
+      label: '商品模板列表',
+      value: JSON.stringify(getListMessages(), null, 2),
+    },
+    {
+      label: '移动端表单',
+      value: JSON.stringify(getVantMessages(), null, 2),
+    },
+  ]);
+  const playgroundInput = ref(playgroundExamples.value[1].value);
 
   const buildStreamBatches = (messages: A2uiMessage[]) => {
     const componentPayload = messages[2];
@@ -489,28 +562,7 @@
     actionLog.value = [];
     streamState.value = deliveryMode.value === 'stream' ? 'Preparing stream' : 'Delivered instantly';
 
-    const nextProcessor = new MessageProcessor(
-      [
-        new Catalog(
-          BASIC_CATALOG_ID,
-          BASIC_COMPONENTS,
-          BASIC_FUNCTIONS,
-          BASIC_THEME_SCHEMA,
-        ),
-        new Catalog(
-          VANT_CATALOG_ID,
-          [...VANT_COMPONENTS, SmartSummaryApi],
-          VANT_FUNCTIONS,
-          VANT_THEME_SCHEMA,
-        ),
-      ],
-      (action: A2uiClientAction) => {
-        actionLog.value = [
-          `${new Date().toLocaleTimeString()} ${action.name} ${JSON.stringify(action.context ?? {})}`,
-          ...actionLog.value,
-        ].slice(0, 8);
-      },
-    );
+    const nextProcessor = createProcessor();
 
     processor.value = nextProcessor;
 
@@ -528,8 +580,75 @@
   };
 
   watchEffect(() => {
+    if (pageMode.value !== 'demo') return;
     loadDemo(mode.value);
   });
+
+  const parsePlaygroundMessages = (input: string): A2uiMessage[] => {
+    const parsed = JSON.parse(input);
+    if (Array.isArray(parsed)) {
+      return parsed as A2uiMessage[];
+    }
+
+    if (parsed && typeof parsed === 'object' && Array.isArray((parsed as { messages?: unknown }).messages)) {
+      return (parsed as { messages: A2uiMessage[] }).messages;
+    }
+
+    throw new Error('JSON 必须是 messages 数组，或者形如 { "messages": [...] } 的对象。');
+  };
+
+  const detectSurfaceId = (messages: A2uiMessage[]) => {
+    for (const message of messages) {
+      if ('createSurface' in message) return message.createSurface.surfaceId;
+      if ('updateComponents' in message) return message.updateComponents.surfaceId;
+      if ('updateDataModel' in message) return message.updateDataModel.surfaceId;
+    }
+    return 'playground-surface';
+  };
+
+  const applyPlaygroundJson = () => {
+    playgroundError.value = '';
+
+    try {
+      const messages = parsePlaygroundMessages(playgroundInput.value);
+      const nextProcessor = createProcessor();
+      const nextSurfaceId = detectSurfaceId(messages);
+
+      nextProcessor.processMessages(messages);
+      playgroundSurfaceId.value = nextSurfaceId;
+      playgroundProcessor.value = nextProcessor;
+    } catch (error) {
+      playgroundError.value = error instanceof Error ? error.message : String(error);
+    }
+  };
+
+  const injectPlaygroundExample = (value: string) => {
+    playgroundInput.value = value;
+    applyPlaygroundJson();
+  };
+
+  const formatPlaygroundJson = () => {
+    playgroundError.value = '';
+
+    try {
+      const parsed = JSON.parse(playgroundInput.value);
+      playgroundInput.value = JSON.stringify(parsed, null, 2);
+    } catch (error) {
+      playgroundError.value = error instanceof Error ? `格式化失败：${error.message}` : String(error);
+    }
+  };
+
+  const copyPlaygroundJson = async () => {
+    playgroundError.value = '';
+
+    try {
+      await navigator.clipboard.writeText(playgroundInput.value);
+    } catch (error) {
+      playgroundError.value = error instanceof Error ? `复制失败：${error.message}` : String(error);
+    }
+  };
+
+  applyPlaygroundJson();
 </script>
 
 <template>
@@ -537,9 +656,26 @@
     <header class="demo-header">
       <div>
         <h1>A2UI Vue + Vant Demo</h1>
-        <p>Switch between the official basic catalog and a Vant-flavored mobile catalog.</p>
+        <p>Switch between the official demo gallery and a JSON playground for direct rendering.</p>
       </div>
       <div class="demo-actions">
+        <VanButton
+          :type="pageMode === 'demo' ? 'primary' : 'default'"
+          @click="pageMode = 'demo'"
+        >
+          Demo
+        </VanButton>
+        <VanButton
+          :type="pageMode === 'playground' ? 'primary' : 'default'"
+          @click="pageMode = 'playground'"
+        >
+          Playground
+        </VanButton>
+      </div>
+    </header>
+
+    <template v-if="pageMode === 'demo'">
+      <div class="demo-actions demo-actions--secondary">
         <VanButton
           :type="mode === 'basic' ? 'primary' : 'default'"
           @click="mode = 'basic'"
@@ -571,36 +707,109 @@
           Stream
         </VanButton>
       </div>
-    </header>
 
-    <VanNoticeBar
-      left-icon="info-o"
-      :text="`Current catalog: ${currentCatalogId} · ${demoTitle} · ${streamState}`"
-    />
+      <VanNoticeBar
+        left-icon="info-o"
+        :text="`Current catalog: ${currentCatalogId} · ${demoTitle} · ${streamState}`"
+      />
 
-    <main class="demo-grid">
-      <section class="demo-surface">
-        <A2UIProvider
-          :processor="processor"
-          :surface-id="surfaceId"
-        >
-          <ComponentNode id="root" />
-        </A2UIProvider>
-      </section>
-
-      <aside class="demo-log">
-        <h2>Action Log</h2>
-        <p v-if="actionLog.length === 0">Interact with the rendered UI to emit actions.</p>
-        <ul v-else>
-          <li
-            v-for="entry in actionLog"
-            :key="entry"
+      <main class="demo-grid">
+        <section class="demo-surface">
+          <A2UIProvider
+            :processor="processor"
+            :surface-id="surfaceId"
           >
-            {{ entry }}
-          </li>
-        </ul>
-      </aside>
-    </main>
+            <ComponentNode id="root" />
+          </A2UIProvider>
+        </section>
+
+        <aside class="demo-log">
+          <h2>Action Log</h2>
+          <p v-if="actionLog.length === 0">Interact with the rendered UI to emit actions.</p>
+          <ul v-else>
+            <li
+              v-for="entry in actionLog"
+              :key="entry"
+            >
+              {{ entry }}
+            </li>
+          </ul>
+        </aside>
+      </main>
+    </template>
+
+    <template v-else>
+      <VanNoticeBar
+        left-icon="edit"
+        text="在左侧输入 messages JSON，点击应用后会直接在右侧渲染。支持直接粘贴数组，或 { messages: [...] }。"
+      />
+
+      <main class="demo-grid playground-grid">
+        <section class="demo-surface playground-editor">
+          <div class="playground-toolbar">
+            <VanButton
+              type="primary"
+              @click="applyPlaygroundJson"
+            >
+              应用 JSON
+            </VanButton>
+            <VanButton
+              plain
+              @click="formatPlaygroundJson"
+            >
+              格式化 JSON
+            </VanButton>
+            <VanButton
+              plain
+              @click="copyPlaygroundJson"
+            >
+              复制当前 JSON
+            </VanButton>
+            <VanButton
+              plain
+              @click="playgroundInput = ''"
+            >
+              清空
+            </VanButton>
+          </div>
+
+          <div class="playground-examples">
+            <span class="playground-examples-label">快速示例：</span>
+            <VanButton
+              v-for="example in playgroundExamples"
+              :key="example.label"
+              size="small"
+              plain
+              @click="injectPlaygroundExample(example.value)"
+            >
+              {{ example.label }}
+            </VanButton>
+          </div>
+
+          <textarea
+            v-model="playgroundInput"
+            class="playground-textarea"
+            spellcheck="false"
+          />
+
+          <p
+            v-if="playgroundError"
+            class="playground-error"
+          >
+            {{ playgroundError }}
+          </p>
+        </section>
+
+        <section class="demo-surface">
+          <A2UIProvider
+            :processor="playgroundProcessor"
+            :surface-id="playgroundSurfaceId"
+          >
+            <ComponentNode id="root" />
+          </A2UIProvider>
+        </section>
+      </main>
+    </template>
   </div>
 </template>
 
@@ -636,7 +845,12 @@
 
   .demo-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .demo-actions--secondary {
+    margin-bottom: 16px;
   }
 
   .demo-grid {
@@ -664,6 +878,54 @@
     margin: 0;
     padding-left: 18px;
     color: #374151;
+  }
+
+  .playground-grid {
+    grid-template-columns: minmax(360px, 520px) minmax(0, 1fr);
+  }
+
+  .playground-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .playground-toolbar {
+    display: flex;
+    gap: 8px;
+  }
+
+  .playground-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .playground-examples-label {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .playground-textarea {
+    min-height: 560px;
+    width: 100%;
+    resize: vertical;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 16px;
+    padding: 14px;
+    box-sizing: border-box;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #0f172a;
+    background: #f8fafc;
+  }
+
+  .playground-error {
+    margin: 0;
+    color: #dc2626;
+    font-size: 13px;
   }
 
   @media (max-width: 900px) {
