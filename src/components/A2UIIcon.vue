@@ -19,7 +19,7 @@ const props = defineProps<{ node: ComponentModel }>();
     return typeof raw === 'number' ? raw : undefined;
   });
   const color = computed(() => {
-    const type = boundProps.value.type as VantIconType | undefined;
+    const type = boundProps.value.type as VantIconType | undefined || 'primary';
     switch (type) {
       case 'primary':
         return 'var(--van-primary-color)';

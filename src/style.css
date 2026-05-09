@@ -27,17 +27,17 @@
   --a2ui-border-width: 1px;
   --a2ui-border: 1px solid var(--a2ui-color-border, #e5e7eb);
 
-  --a2ui-grid-base: 8px;
+  --a2ui-grid-base: 12px;
   --a2ui-spacing-xs: calc(var(--a2ui-spacing-s) / 2);
   --a2ui-spacing-s: calc(var(--a2ui-spacing-m) / 2);
   --a2ui-spacing-m: var(--a2ui-grid-base);
-  --a2ui-spacing-l: calc(var(--a2ui-spacing-m) * 2);
+  --a2ui-spacing-l: calc(var(--a2ui-spacing-m) * 1.5);
   --a2ui-spacing-xl: calc(var(--a2ui-spacing-l) * 2);
 
   --a2ui-font-family-title: inherit;
   --a2ui-font-family-monospace: monospace;
   --a2ui-font-size: 16px;
-  --a2ui-font-scale: 1.2;
+  --a2ui-font-scale: 1.15;
   --a2ui-font-size-xs: calc(var(--a2ui-font-size-s) / var(--a2ui-font-scale));
   --a2ui-font-size-s: calc(var(--a2ui-font-size-m) / var(--a2ui-font-scale));
   --a2ui-font-size-m: var(--a2ui-font-size);
@@ -124,17 +124,18 @@ html, body, #app {
 .a2ui-provider {
   color: var(--a2ui-color-on-background);
 }
-
-.a2ui-row,
-.a2ui-column,
-.a2ui-list {
+.a2ui-column {
   display: flex;
   gap: var(--a2ui-spacing-l);
+}
+.a2ui-row,
+.a2ui-list {
+  display: flex;
+  gap: var(--a2ui-spacing-m);
 }
 
 .a2ui-row {
   flex-direction: row;
-  padding: var(--a2ui-spacing-s, 4px);
   align-items: stretch;
 }
 

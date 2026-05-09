@@ -17,6 +17,7 @@ import {
   BASIC_FUNCTIONS,
   CardApi,
   RowApi,
+  TextApi,
 } from '@a2ui/web_core/v0_9/basic_catalog';
 import { CommonProps, InlineStyleSchema } from './common-props';
 import { VANT_ICON_NAMES, VANT_ICON_TYPES } from './vant-icon';
@@ -82,6 +83,14 @@ export const VantCardApi = {
   name: 'Card',
   schema: CardApi.schema.extend({
     style: InlineStyleSchema.optional(),
+  }),
+} satisfies ComponentApi;
+
+export const VantTextApi = {
+  name: 'Text',
+  schema: TextApi.schema.extend({
+    style: InlineStyleSchema.optional(),
+    lines: DynamicNumberSchema.optional(),
   }),
 } satisfies ComponentApi;
 
@@ -218,6 +227,7 @@ const overrideNames = new Set([
   'Card',
   'Icon',
   'Row',
+  'Text',
   'Button',
   'TextField',
   'CheckBox',
@@ -235,6 +245,7 @@ const baseComponents = BASIC_COMPONENTS.filter(
 export const VANT_COMPONENTS_LIST: ComponentApi[] = [
   ...baseComponents,
   VantCardApi,
+  VantTextApi,
   CellGroupApi,
   TagApi,
   VantIconApi,

@@ -694,6 +694,8 @@ registerCatalogDefinition(
   - `type` 支持 `default | primary | success | warning | danger`，用于映射颜色
 - `Text`
   - `caption` 会走 `@a2ui/markdown-it` 的 `renderMarkdown`
+  - 支持 `style` 内联样式对象
+  - 支持 `lines`，超出指定行数后省略
   - 其他 `variant` 仍然按类名区分样式
 
 如果你继续扩 `vant catalog`，建议：
