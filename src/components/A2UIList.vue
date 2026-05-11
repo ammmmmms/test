@@ -14,7 +14,13 @@
   const align = computed(() => boundProps.value.align ?? 'stretch');
   const listStyle = computed<CSSProperties>(() => {
     const gap = Number(boundProps.value.gap);
-    return Number.isFinite(gap) && gap >= 0 ? { gap: `${gap}px` } : {};
+    const style = { ...(boundProps.value.style ?? {}) } as CSSProperties;
+
+    if (Number.isFinite(gap) && gap >= 0) {
+      style.gap = `${gap}px`;
+    }
+
+    return style;
   });
 </script>
 

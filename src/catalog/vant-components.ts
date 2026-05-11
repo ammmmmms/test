@@ -79,6 +79,7 @@ export const VantRowApi = {
   schema: RowApi.schema.extend({
     action: ActionSchema.optional(),
     gap: DynamicNumberSchema.optional(),
+    style: InlineStyleSchema.optional(),
   }),
 } satisfies ComponentApi;
 
@@ -86,6 +87,7 @@ export const VantColumnApi = {
   name: 'Column',
   schema: ColumnApi.schema.extend({
     gap: DynamicNumberSchema.optional(),
+    style: InlineStyleSchema.optional(),
   }),
 } satisfies ComponentApi;
 
@@ -93,6 +95,7 @@ export const VantListApi = {
   name: 'List',
   schema: ListApi.schema.extend({
     gap: DynamicNumberSchema.optional(),
+    style: InlineStyleSchema.optional(),
   }),
 } satisfies ComponentApi;
 

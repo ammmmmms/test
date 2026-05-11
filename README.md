@@ -698,8 +698,10 @@ registerCatalogDefinition(
   - 支持 `lines`，超出指定行数后省略
 - `Row / Column`
   - 支持 `gap`，传数字，运行时按 `px` 处理
+  - 支持 `style` 内联样式对象
 - `List`
   - 支持 `gap`，传数字，运行时按 `px` 处理
+  - 支持 `style` 内联样式对象
 - `Button`
   - 支持 `size`
   - 可选值：`large | normal | small | mini`
