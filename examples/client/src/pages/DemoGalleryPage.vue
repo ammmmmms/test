@@ -4,6 +4,10 @@
   import { type A2uiClientAction } from '@a2ui/web_core/v0_9';
   import { A2UIProvider, ComponentNode, VANT_CATALOG_ID, BASIC_CATALOG_ID } from '@demo-renderer';
   import { createDemoProcessor, DEMO_SURFACE_ID, getDemoMessages, type DemoMode } from '../demo-data';
+  import { getCatalogSchema } from '@demo-renderer';
+  import {defaultRegistry} from '@demo-renderer/core/ComponentRegistry'
+
+  console.log(getCatalogSchema(defaultRegistry,VANT_CATALOG_ID))
 
   type DeliveryMode = 'instant' | 'stream';
 
