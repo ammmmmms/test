@@ -123,6 +123,10 @@ export const VantButtonApi = {
         .enum(['default', 'primary', 'borderless', 'danger', 'success'])
         .default('default')
         .optional(),
+      size: z
+        .enum(['large', 'normal', 'small', 'mini'])
+        .default('normal')
+        .optional(),
       action: ActionSchema,
       checks: CheckableSchema.shape.checks,
       block: DynamicBooleanSchema.optional(),

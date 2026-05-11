@@ -28,6 +28,7 @@
   });
   const plain = computed(() => boundProps.value.variant === 'borderless');
   const block = computed(() => !!boundProps.value.block);
+  const size = computed(() => boundProps.value.size ?? 'normal');
   const variantClass = computed(() => {
     const variant = boundProps.value.variant ?? 'default';
     return `a2ui-button--${variant}`;
@@ -46,6 +47,7 @@
     :type="type"
     :plain="plain"
     :block="block"
+    :size="size"
     @click="onClick"
   >
     <ComponentNode

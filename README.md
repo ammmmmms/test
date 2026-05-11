@@ -700,7 +700,9 @@ registerCatalogDefinition(
   - 支持 `gap`，传数字，运行时按 `px` 处理
 - `List`
   - 支持 `gap`，传数字，运行时按 `px` 处理
-  - 其他 `variant` 仍然按类名区分样式
+- `Button`
+  - 支持 `size`
+  - 可选值：`large | normal | small | mini`
 
 如果你继续扩 `vant catalog`，建议：
 
