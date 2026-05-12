@@ -96,6 +96,16 @@ export const VantListApi = {
   schema: ListApi.schema.extend({
     gap: DynamicNumberSchema.optional(),
     style: InlineStyleSchema.optional(),
+    collapse: z
+      .object({
+        limit: DynamicNumberSchema,
+        expandText: DynamicStringSchema.optional(),
+        collapseText: DynamicStringSchema.optional(),
+        popupTitle: DynamicStringSchema.optional(),
+        style: InlineStyleSchema.optional(),
+      })
+      .strict()
+      .optional(),
   }),
 } satisfies ComponentApi;
 

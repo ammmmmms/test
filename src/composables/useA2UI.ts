@@ -6,6 +6,7 @@ import {
   type DynamicValue,
 } from '@a2ui/web_core/v0_9';
 import { computed, inject, type InjectionKey } from 'vue';
+import type { A2UIRuntimeOptions } from '../core/runtimeOptions';
 
 export type A2UIActionPayload = A2uiClientAction;
 
@@ -14,6 +15,7 @@ export interface A2UIContext {
   onAction: (action: A2UIActionPayload) => void;
   processor: any;
   dataContextPath?: string;
+  runtime: Required<A2UIRuntimeOptions>;
 }
 
 export const A2UI_CONTEXT_KEY: InjectionKey<A2UIContext> =
@@ -127,6 +129,7 @@ export function useA2UI() {
   return {
     surfaceId: context.surfaceId,
     dataContextPath: context.dataContextPath,
+    runtime: context.runtime,
     dataContext,
     resolveValue,
     resolveDynamicChildren,

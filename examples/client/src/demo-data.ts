@@ -454,6 +454,152 @@ export const getListMessages = (surfaceId: string = DEMO_SURFACE_ID): A2uiMessag
   },
 ]);
 
+export const getCollapsedListMessages = (surfaceId: string = DEMO_SURFACE_ID): A2uiMessage[] => ([
+  {
+    version: 'v0.9',
+    createSurface: {
+      surfaceId,
+      catalogId: VANT_CATALOG_ID,
+      theme: {
+        colorPrimary: '#2563eb',
+        colorBackground: '#f8fafc',
+        colorSurface: '#ffffff',
+      },
+      sendDataModel: true,
+    },
+  },
+  {
+    version: 'v0.9',
+    updateDataModel: {
+      surfaceId,
+      value: {
+        tasks: [
+          { id: 't-001', title: '确认需求边界', owner: 'PM', status: '已完成' },
+          { id: 't-002', title: '同步接口字段', owner: 'FE', status: '进行中' },
+          { id: 't-003', title: '补充验收用例', owner: 'QA', status: '待处理' },
+          { id: 't-004', title: '准备灰度配置', owner: 'Ops', status: '待处理' },
+          { id: 't-005', title: '发布后复盘', owner: 'Team', status: '待处理' },
+        ],
+      },
+    },
+  },
+  {
+    version: 'v0.9',
+    updateComponents: {
+      surfaceId,
+      components: [
+        {
+          id: 'root',
+          component: 'Column',
+          gap: 12,
+          children: ['header-card', 'task-list'],
+        },
+        {
+          id: 'header-card',
+          component: 'Card',
+          child: 'header-content',
+          style: {
+            backgroundColor: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            padding: '16px',
+            borderRadius: '14px',
+          },
+        },
+        {
+          id: 'header-content',
+          component: 'Column',
+          gap: 6,
+          children: ['title', 'hint'],
+        },
+        {
+          id: 'title',
+          component: 'Text',
+          text: '折叠列表示例',
+          variant: 'h3',
+        },
+        {
+          id: 'hint',
+          component: 'Text',
+          text: '当前 List 只展示前 2 项。PC 模式点击展开会原地显示全部；App 模式会打开 Popup。',
+          variant: 'caption',
+        },
+        {
+          id: 'task-list',
+          component: 'List',
+          gap: 10,
+          collapse: {
+            limit: 2,
+            expandText: '展开全部任务',
+            collapseText: '收起任务',
+            popupTitle: '任务',
+            style: {
+              color: '#2563eb',
+              backgroundColor: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              borderRadius: '12px',
+              padding: '10px',
+            },
+          },
+          children: {
+            componentId: 'task-card',
+            path: '/tasks',
+          },
+        },
+        {
+          id: 'task-card',
+          component: 'Card',
+          child: 'task-content',
+          style: {
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+            padding: '12px',
+            borderRadius: '12px',
+          },
+        },
+        {
+          id: 'task-content',
+          component: 'Row',
+          align: 'center',
+          justify: 'spaceBetween',
+          gap: 12,
+          children: ['task-copy', 'task-status'],
+        },
+        {
+          id: 'task-copy',
+          component: 'Column',
+          gap: 4,
+          children: ['task-title', 'task-owner'],
+        },
+        {
+          id: 'task-title',
+          component: 'Text',
+          text: { path: 'title' },
+          variant: 'body',
+        },
+        {
+          id: 'task-owner',
+          component: 'Text',
+          text: {
+            call: 'formatString',
+            args: {
+              value: '负责人：${owner}',
+            },
+            returnType: 'string',
+          },
+          variant: 'caption',
+        },
+        {
+          id: 'task-status',
+          component: 'Tag',
+          text: { path: 'status' },
+          type: 'primary',
+          plain: true,
+        },
+      ],
+    },
+  },
+]);
+
 export function getDemoMessages(mode: DemoMode, surfaceId: string = DEMO_SURFACE_ID) {
   if (mode === 'basic') return getBasicMessages(surfaceId);
   if (mode === 'vant') return getVantMessages(surfaceId);
@@ -469,6 +615,10 @@ export function getPlaygroundExamples() {
     {
       label: '商品模板列表',
       value: JSON.stringify(getListMessages('playground-surface'), null, 2),
+    },
+    {
+      label: '折叠列表',
+      value: JSON.stringify(getCollapsedListMessages('playground-surface'), null, 2),
     },
     {
       label: '移动端表单',

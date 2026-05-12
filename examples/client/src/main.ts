@@ -12,6 +12,7 @@ createApp(App)
   .use(A2UiVueRenderer as any, {
     registerBasicCatalog: true,
     registerVantCatalog: true,
+    runtime: { platform: 'app' },
     catalogs: [
       {
         catalogId: VANT_CATALOG_ID,

@@ -11,12 +11,14 @@
   const { boundProps } = useBoundProps(toRef(props, 'node'), VantModalApi);
   const open = ref(false);
 
-  const show = () => {
+  const show = (event?: MouseEvent) => {
+    event?.stopPropagation();
     open.value = true;
     boundProps.value.action?.();
   };
 
-  const hide = () => {
+  const hide = (event?: MouseEvent) => {
+    event?.stopPropagation();
     open.value = false;
     boundProps.value.action?.();
   };

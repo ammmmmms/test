@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@demo-renderer': resolve(__dirname, '../../src'),
+      vue: resolve(__dirname, 'node_modules/vue'),
+      vant: resolve(__dirname, 'node_modules/vant'),
     },
+    dedupe: ['vue', 'vant'],
   },
 });

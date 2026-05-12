@@ -20,6 +20,10 @@ export {
   VANT_CATALOG_ID,
   DEFAULT_CATALOG_ID,
 } from './core/constants';
+export type {
+  A2UIRuntimeOptions,
+  A2UIRuntimePlatform,
+} from './core/runtimeOptions';
 export {
   registerBasicCatalog,
   registerVantCatalog,

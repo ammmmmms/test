@@ -193,6 +193,9 @@ createApp(App)
   .use(A2UiVueRenderer, {
     registerBasicCatalog: true,
     registerVantCatalog: true,
+    runtime: {
+      platform: 'pc',
+    },
   })
   .mount('#app');
 ```
@@ -702,6 +705,9 @@ registerCatalogDefinition(
 - `List`
   - 支持 `gap`，传数字，运行时按 `px` 处理
   - 支持 `style` 内联样式对象
+  - 支持 `collapse.limit` 折叠显示
+  - `runtime.platform: 'pc'` 时点击原地展开/收起
+  - `runtime.platform: 'app'` 时点击打开 Vant Popup，原列表保持折叠
 - `Button`
   - 支持 `size`
   - 可选值：`large | normal | small | mini`

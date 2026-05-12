@@ -1,16 +1,28 @@
 <script setup lang="ts">
-  import { computed, provide, shallowRef, watch } from 'vue';
+  import { computed, inject, provide, shallowRef, watch } from 'vue';
   import { A2UI_CONTEXT_KEY } from './useA2UI';
+  import {
+    A2UI_RUNTIME_OPTIONS_KEY,
+    DEFAULT_A2UI_RUNTIME_OPTIONS,
+    type A2UIRuntimeOptions,
+  } from '../core/runtimeOptions';
 
   const props = defineProps<{
     processor: any;
     surfaceId: string;
     onAction?: (action: any) => void;
+    runtime?: A2UIRuntimeOptions;
   }>();
 
   type Unsubscribable = { unsubscribe: () => void };
 
   const renderVersion = shallowRef(0);
+  const pluginRuntime = inject(A2UI_RUNTIME_OPTIONS_KEY, {});
+  const runtime = computed(() => ({
+    ...DEFAULT_A2UI_RUNTIME_OPTIONS,
+    ...pluginRuntime,
+    ...(props.runtime ?? {}),
+  }));
 
   const bumpRenderVersion = () => {
     renderVersion.value++;
@@ -121,6 +133,9 @@
     },
     get processor() {
       return props.processor;
+    },
+    get runtime() {
+      return runtime.value;
     },
     onAction: (action: any) => {
       props.onAction?.(action);

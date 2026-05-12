@@ -167,6 +167,70 @@ html, body, #app {
   flex-direction: column;
 }
 
+.a2ui-list[data-direction='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.a2ui-list[data-align='center'] {
+  align-items: center;
+}
+
+.a2ui-list[data-align='end'] {
+  align-items: flex-end;
+}
+
+.a2ui-list[data-align='stretch'] {
+  align-items: stretch;
+}
+
+.a2ui-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--a2ui-spacing-m);
+}
+
+.a2ui-list-collapse-toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--a2ui-spacing-s);
+  width: 100%;
+  padding: var(--a2ui-spacing-m);
+  color: var(--a2ui-color-primary);
+  background: transparent;
+  border: 0;
+  border-radius: var(--a2ui-border-radius);
+  font: inherit;
+  cursor: pointer;
+}
+
+.a2ui-list-popup {
+  max-height: 70vh;
+  padding: var(--a2ui-spacing-l);
+  background: var(--a2ui-color-background);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.a2ui-list-popup-title {
+  margin: var(--a2ui-spacing-l) 0 var(--a2ui-spacing-xl);
+  color: var(--a2ui-color-on-background);
+  font-size: var(--a2ui-font-size-l);
+  font-weight: 600;
+  text-align: center;
+  line-height: var(--a2ui-line-height-headings, 1.2);
+  flex-grow: 0;
+}
+
+.a2ui-list--popup {
+  overflow: auto;
+  box-sizing: border-box;
+  flex: 1;
+}
+
 .a2ui-card,
 .a2ui-modal-content {
   padding: var(--a2ui-spacing-m);
