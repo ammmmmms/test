@@ -5,226 +5,6 @@
     "title": "A2UI Vant Catalog",
     "description": "Mobile-oriented A2UI catalog for Vue 3 applications using Vant.",
     "components": {
-        "Text": {
-            "type": "object",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/ComponentCommon"
-                },
-                {
-                    "$ref": "#/$defs/CatalogComponentCommon"
-                },
-                {
-                    "type": "object",
-                    "properties": {
-                        "component": {
-                            "const": "Text"
-                        }
-                    },
-                    "required": [
-                        "component"
-                    ]
-                },
-                {
-                    "type": "object",
-                    "properties": {
-                        "accessibility": {
-                            "type": "object",
-                            "properties": {
-                                "label": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "path": {
-                                                    "type": "string",
-                                                    "description": "A JSON Pointer path to a value in the data model."
-                                                }
-                                            },
-                                            "required": [
-                                                "path"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "call": {
-                                                    "type": "string",
-                                                    "description": "The name of the function to call."
-                                                },
-                                                "args": {
-                                                    "type": "object",
-                                                    "additionalProperties": {},
-                                                    "description": "Arguments passed to the function."
-                                                },
-                                                "returnType": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "string",
-                                                        "number",
-                                                        "boolean",
-                                                        "array",
-                                                        "object",
-                                                        "any",
-                                                        "void"
-                                                    ],
-                                                    "default": "boolean"
-                                                }
-                                            },
-                                            "required": [
-                                                "call",
-                                                "args"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
-                                        }
-                                    ],
-                                    "description": "REF:common_types.json#/$defs/DynamicString|A short string used by assistive technologies to convey the purpose of an element."
-                                },
-                                "description": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "path": {
-                                                    "type": "string",
-                                                    "description": "A JSON Pointer path to a value in the data model."
-                                                }
-                                            },
-                                            "required": [
-                                                "path"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "call": {
-                                                    "type": "string",
-                                                    "description": "The name of the function to call."
-                                                },
-                                                "args": {
-                                                    "type": "object",
-                                                    "additionalProperties": {},
-                                                    "description": "Arguments passed to the function."
-                                                },
-                                                "returnType": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "string",
-                                                        "number",
-                                                        "boolean",
-                                                        "array",
-                                                        "object",
-                                                        "any",
-                                                        "void"
-                                                    ],
-                                                    "default": "boolean"
-                                                }
-                                            },
-                                            "required": [
-                                                "call",
-                                                "args"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
-                                        }
-                                    ],
-                                    "description": "REF:common_types.json#/$defs/DynamicString|Additional information provided by assistive technologies about an element."
-                                }
-                            },
-                            "additionalProperties": false,
-                            "description": "REF:common_types.json#/$defs/AccessibilityAttributes|Attributes to enhance accessibility."
-                        },
-                        "weight": {
-                            "type": "number",
-                            "description": "The relative weight of this component within a Row or Column. This is similar to the CSS 'flex-grow' property. Note: this may ONLY be set when the component is a direct descendant of a Row or Column."
-                        },
-                        "text": {
-                            "anyOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "path": {
-                                            "type": "string",
-                                            "description": "A JSON Pointer path to a value in the data model."
-                                        }
-                                    },
-                                    "required": [
-                                        "path"
-                                    ],
-                                    "additionalProperties": false,
-                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "call": {
-                                            "type": "string",
-                                            "description": "The name of the function to call."
-                                        },
-                                        "args": {
-                                            "type": "object",
-                                            "additionalProperties": {},
-                                            "description": "Arguments passed to the function."
-                                        },
-                                        "returnType": {
-                                            "type": "string",
-                                            "enum": [
-                                                "string",
-                                                "number",
-                                                "boolean",
-                                                "array",
-                                                "object",
-                                                "any",
-                                                "void"
-                                            ],
-                                            "default": "boolean"
-                                        }
-                                    },
-                                    "required": [
-                                        "call",
-                                        "args"
-                                    ],
-                                    "additionalProperties": false,
-                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
-                                }
-                            ],
-                            "description": "The text content to display. While simple Markdown formatting is supported (i.e. without HTML, images, or links), utilizing dedicated UI components is generally preferred for a richer and more structured presentation."
-                        },
-                        "variant": {
-                            "type": "string",
-                            "enum": [
-                                "h1",
-                                "h2",
-                                "h3",
-                                "h4",
-                                "h5",
-                                "caption",
-                                "body"
-                            ],
-                            "default": "body",
-                            "description": "A hint for the base text style."
-                        }
-                    },
-                    "required": [
-                        "text"
-                    ]
-                }
-            ]
-        },
         "Image": {
             "type": "object",
             "allOf": [
@@ -978,6 +758,328 @@
                 }
             ]
         },
+        "Divider": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/$defs/ComponentCommon"
+                },
+                {
+                    "$ref": "#/$defs/CatalogComponentCommon"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "component": {
+                            "const": "Divider"
+                        }
+                    },
+                    "required": [
+                        "component"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "accessibility": {
+                            "type": "object",
+                            "properties": {
+                                "label": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|A short string used by assistive technologies to convey the purpose of an element."
+                                },
+                                "description": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|Additional information provided by assistive technologies about an element."
+                                }
+                            },
+                            "additionalProperties": false,
+                            "description": "REF:common_types.json#/$defs/AccessibilityAttributes|Attributes to enhance accessibility."
+                        },
+                        "weight": {
+                            "type": "number",
+                            "description": "The relative weight of this component within a Row or Column. This is similar to the CSS 'flex-grow' property. Note: this may ONLY be set when the component is a direct descendant of a Row or Column."
+                        },
+                        "axis": {
+                            "type": "string",
+                            "enum": [
+                                "horizontal",
+                                "vertical"
+                            ],
+                            "default": "horizontal",
+                            "description": "The orientation of the divider."
+                        }
+                    }
+                }
+            ]
+        },
+        "Card": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/$defs/ComponentCommon"
+                },
+                {
+                    "$ref": "#/$defs/CatalogComponentCommon"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "component": {
+                            "const": "Card"
+                        }
+                    },
+                    "required": [
+                        "component"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "accessibility": {
+                            "type": "object",
+                            "properties": {
+                                "label": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|A short string used by assistive technologies to convey the purpose of an element."
+                                },
+                                "description": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|Additional information provided by assistive technologies about an element."
+                                }
+                            },
+                            "additionalProperties": false,
+                            "description": "REF:common_types.json#/$defs/AccessibilityAttributes|Attributes to enhance accessibility."
+                        },
+                        "weight": {
+                            "type": "number",
+                            "description": "The relative weight of this component within a Row or Column. This is similar to the CSS 'flex-grow' property. Note: this may ONLY be set when the component is a direct descendant of a Row or Column."
+                        },
+                        "child": {
+                            "type": "string",
+                            "description": "The ID of the single child component to be rendered inside the card. To display multiple elements, you MUST wrap them in a layout component (like Column or Row) and pass that container's ID here. Do NOT pass multiple IDs or a non-existent ID. Do NOT define the child component inline."
+                        },
+                        "style": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
+                        }
+                    },
+                    "required": [
+                        "child"
+                    ]
+                }
+            ]
+        },
         "Column": {
             "type": "object",
             "allOf": [
@@ -1178,6 +1280,71 @@
                             ],
                             "default": "stretch",
                             "description": "Defines the alignment of children along the cross axis (horizontally). This is similar to the CSS 'align-items' property."
+                        },
+                        "gap": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
+                                        }
+                                    },
+                                    "required": [
+                                        "path"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                }
+                            ],
+                            "description": "REF:common_types.json#/$defs/DynamicNumber|Represents a value that can be either a literal number, a path to a number in the data model, or a function call returning a number."
+                        },
+                        "style": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
                         }
                     },
                     "required": [
@@ -1382,6 +1549,310 @@
                             ],
                             "default": "stretch",
                             "description": "Defines the alignment of children along the cross axis."
+                        },
+                        "gap": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
+                                        }
+                                    },
+                                    "required": [
+                                        "path"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                }
+                            ],
+                            "description": "REF:common_types.json#/$defs/DynamicNumber|Represents a value that can be either a literal number, a path to a number in the data model, or a function call returning a number."
+                        },
+                        "style": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
+                        },
+                        "collapse": {
+                            "type": "object",
+                            "properties": {
+                                "limit": {
+                                    "anyOf": [
+                                        {
+                                            "type": "number"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicNumber|Represents a value that can be either a literal number, a path to a number in the data model, or a function call returning a number."
+                                },
+                                "expandText": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|Represents a string"
+                                },
+                                "collapseText": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|Represents a string"
+                                },
+                                "popupTitle": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "path": {
+                                                    "type": "string",
+                                                    "description": "A JSON Pointer path to a value in the data model."
+                                                }
+                                            },
+                                            "required": [
+                                                "path"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "call": {
+                                                    "type": "string",
+                                                    "description": "The name of the function to call."
+                                                },
+                                                "args": {
+                                                    "type": "object",
+                                                    "additionalProperties": {},
+                                                    "description": "Arguments passed to the function."
+                                                },
+                                                "returnType": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "string",
+                                                        "number",
+                                                        "boolean",
+                                                        "array",
+                                                        "object",
+                                                        "any",
+                                                        "void"
+                                                    ],
+                                                    "default": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "call",
+                                                "args"
+                                            ],
+                                            "additionalProperties": false,
+                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                        }
+                                    ],
+                                    "description": "REF:common_types.json#/$defs/DynamicString|Represents a string"
+                                },
+                                "style": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": [
+                                            "string",
+                                            "number"
+                                        ]
+                                    },
+                                    "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
+                                }
+                            },
+                            "required": [
+                                "limit"
+                            ],
+                            "additionalProperties": false
                         }
                     },
                     "required": [
@@ -1390,7 +1861,7 @@
                 }
             ]
         },
-        "Card": {
+        "Text": {
             "type": "object",
             "allOf": [
                 {
@@ -1403,7 +1874,7 @@
                     "type": "object",
                     "properties": {
                         "component": {
-                            "const": "Card"
+                            "const": "Text"
                         }
                     },
                     "required": [
@@ -1534,171 +2005,144 @@
                             "type": "number",
                             "description": "The relative weight of this component within a Row or Column. This is similar to the CSS 'flex-grow' property. Note: this may ONLY be set when the component is a direct descendant of a Row or Column."
                         },
-                        "child": {
-                            "type": "string",
-                            "description": "The ID of the single child component to be rendered inside the card. To display multiple elements, you MUST wrap them in a layout component (like Column or Row) and pass that container's ID here. Do NOT pass multiple IDs or a non-existent ID. Do NOT define the child component inline."
-                        }
-                    },
-                    "required": [
-                        "child"
-                    ]
-                }
-            ]
-        },
-        "Divider": {
-            "type": "object",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/ComponentCommon"
-                },
-                {
-                    "$ref": "#/$defs/CatalogComponentCommon"
-                },
-                {
-                    "type": "object",
-                    "properties": {
-                        "component": {
-                            "const": "Divider"
-                        }
-                    },
-                    "required": [
-                        "component"
-                    ]
-                },
-                {
-                    "type": "object",
-                    "properties": {
-                        "accessibility": {
-                            "type": "object",
-                            "properties": {
-                                "label": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "path": {
-                                                    "type": "string",
-                                                    "description": "A JSON Pointer path to a value in the data model."
-                                                }
-                                            },
-                                            "required": [
-                                                "path"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "call": {
-                                                    "type": "string",
-                                                    "description": "The name of the function to call."
-                                                },
-                                                "args": {
-                                                    "type": "object",
-                                                    "additionalProperties": {},
-                                                    "description": "Arguments passed to the function."
-                                                },
-                                                "returnType": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "string",
-                                                        "number",
-                                                        "boolean",
-                                                        "array",
-                                                        "object",
-                                                        "any",
-                                                        "void"
-                                                    ],
-                                                    "default": "boolean"
-                                                }
-                                            },
-                                            "required": [
-                                                "call",
-                                                "args"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
-                                        }
-                                    ],
-                                    "description": "REF:common_types.json#/$defs/DynamicString|A short string used by assistive technologies to convey the purpose of an element."
+                        "text": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
                                 },
-                                "description": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "path": {
-                                                    "type": "string",
-                                                    "description": "A JSON Pointer path to a value in the data model."
-                                                }
-                                            },
-                                            "required": [
-                                                "path"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
-                                        },
-                                        {
-                                            "type": "object",
-                                            "properties": {
-                                                "call": {
-                                                    "type": "string",
-                                                    "description": "The name of the function to call."
-                                                },
-                                                "args": {
-                                                    "type": "object",
-                                                    "additionalProperties": {},
-                                                    "description": "Arguments passed to the function."
-                                                },
-                                                "returnType": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "string",
-                                                        "number",
-                                                        "boolean",
-                                                        "array",
-                                                        "object",
-                                                        "any",
-                                                        "void"
-                                                    ],
-                                                    "default": "boolean"
-                                                }
-                                            },
-                                            "required": [
-                                                "call",
-                                                "args"
-                                            ],
-                                            "additionalProperties": false,
-                                            "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
                                         }
+                                    },
+                                    "required": [
+                                        "path"
                                     ],
-                                    "description": "REF:common_types.json#/$defs/DynamicString|Additional information provided by assistive technologies about an element."
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
                                 }
-                            },
-                            "additionalProperties": false,
-                            "description": "REF:common_types.json#/$defs/AccessibilityAttributes|Attributes to enhance accessibility."
+                            ],
+                            "description": "The text content to display. While simple Markdown formatting is supported (i.e. without HTML, images, or links), utilizing dedicated UI components is generally preferred for a richer and more structured presentation."
                         },
-                        "weight": {
-                            "type": "number",
-                            "description": "The relative weight of this component within a Row or Column. This is similar to the CSS 'flex-grow' property. Note: this may ONLY be set when the component is a direct descendant of a Row or Column."
-                        },
-                        "axis": {
+                        "variant": {
                             "type": "string",
                             "enum": [
-                                "horizontal",
-                                "vertical"
+                                "h1",
+                                "h2",
+                                "h3",
+                                "h4",
+                                "h5",
+                                "caption",
+                                "body"
                             ],
-                            "default": "horizontal",
-                            "description": "The orientation of the divider."
+                            "default": "body",
+                            "description": "A hint for the base text style."
+                        },
+                        "style": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
+                        },
+                        "lines": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
+                                        }
+                                    },
+                                    "required": [
+                                        "path"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                }
+                            ],
+                            "description": "REF:common_types.json#/$defs/DynamicNumber|Represents a value that can be either a literal number, a path to a number in the data model, or a function call returning a number."
                         }
-                    }
+                    },
+                    "required": [
+                        "text"
+                    ]
                 }
             ]
         },
@@ -2412,270 +2856,321 @@
                             "description": "The relative weight of this component within a Row or Column. Similar to CSS 'flex-grow'."
                         },
                         "name": {
-                            "type": "string",
-                            "enum": [
-                                "add",
-                                "add-o",
-                                "add-square",
-                                "after-sale",
-                                "aim",
-                                "alipay",
-                                "apps-o",
-                                "arrow",
-                                "arrow-double-left",
-                                "arrow-double-right",
-                                "arrow-down",
-                                "arrow-left",
-                                "arrow-up",
-                                "ascending",
-                                "audio",
-                                "award",
-                                "award-o",
-                                "back-top",
-                                "bag",
-                                "bag-o",
-                                "balance-list",
-                                "balance-list-o",
-                                "balance-o",
-                                "balance-pay",
-                                "bar-chart-o",
-                                "bars",
-                                "bell",
-                                "bill",
-                                "bill-o",
-                                "birthday-cake-o",
-                                "bookmark",
-                                "bookmark-o",
-                                "browsing-history",
-                                "browsing-history-o",
-                                "brush-o",
-                                "bulb-o",
-                                "bullhorn-o",
-                                "calendar-o",
-                                "card",
-                                "cart",
-                                "cart-circle",
-                                "cart-circle-o",
-                                "cart-o",
-                                "cash-back-record",
-                                "cash-back-record-o",
-                                "cash-o",
-                                "cash-on-deliver",
-                                "cashier-o",
-                                "certificate",
-                                "chart-trending-o",
-                                "chat",
-                                "chat-o",
-                                "checked",
-                                "circle",
-                                "clear",
-                                "clock",
-                                "clock-o",
-                                "close",
-                                "closed-eye",
-                                "cluster",
-                                "cluster-o",
-                                "column",
-                                "comment",
-                                "comment-circle",
-                                "comment-circle-o",
-                                "comment-o",
-                                "completed",
-                                "completed-o",
-                                "contact",
-                                "contact-o",
-                                "coupon",
-                                "coupon-o",
-                                "credit-pay",
-                                "cross",
-                                "debit-pay",
-                                "delete",
-                                "delete-o",
-                                "descending",
-                                "description",
-                                "description-o",
-                                "desktop-o",
-                                "diamond",
-                                "diamond-o",
-                                "discount",
-                                "discount-o",
-                                "down",
-                                "ecard-pay",
-                                "edit",
-                                "ellipsis",
-                                "enlarge",
-                                "envelop-o",
-                                "exchange",
-                                "expand",
-                                "expand-o",
-                                "eye",
-                                "eye-o",
-                                "fail",
-                                "failure",
-                                "filter-o",
-                                "fire",
-                                "fire-o",
-                                "flag-o",
-                                "flower-o",
-                                "font",
-                                "font-family",
-                                "font-o",
-                                "free-postage",
-                                "friends",
-                                "friends-o",
-                                "gem",
-                                "gem-o",
-                                "gift",
-                                "gift-card",
-                                "gift-card-o",
-                                "gift-o",
-                                "gold-coin",
-                                "gold-coin-o",
-                                "good-job",
-                                "good-job-o",
-                                "goods-collect",
-                                "goods-collect-o",
-                                "graphic",
-                                "guide-o",
-                                "home-o",
-                                "hot",
-                                "hot-o",
-                                "hot-sale",
-                                "hot-sale-o",
-                                "hotel-o",
-                                "idcard",
-                                "info",
-                                "info-o",
-                                "invitation",
-                                "label",
-                                "label-o",
-                                "like",
-                                "like-o",
-                                "link-o",
-                                "list-switch",
-                                "list-switching",
-                                "live",
-                                "location",
-                                "location-o",
-                                "lock",
-                                "logistics",
-                                "manager",
-                                "manager-o",
-                                "map-marked",
-                                "medal",
-                                "medal-o",
-                                "miniprogram-o",
-                                "minus",
-                                "more",
-                                "more-o",
-                                "music",
-                                "music-o",
-                                "new",
-                                "new-arrival",
-                                "new-arrival-o",
-                                "new-o",
-                                "newspaper",
-                                "newspaper-o",
-                                "notes",
-                                "notes-o",
-                                "orders-o",
-                                "other-pay",
-                                "paid",
-                                "passed",
-                                "pause",
-                                "pause-circle",
-                                "pause-circle-o",
-                                "peer-pay",
-                                "pending-payment",
-                                "phone",
-                                "phone-circle",
-                                "phone-circle-o",
-                                "phone-o",
-                                "photo",
-                                "photo-fail",
-                                "photo-o",
-                                "photograph",
-                                "play",
-                                "play-circle",
-                                "play-circle-o",
-                                "plus",
-                                "point-gift",
-                                "point-gift-o",
-                                "points",
-                                "printer",
-                                "qq",
-                                "qr",
-                                "qr-invalid",
-                                "question",
-                                "question-o",
-                                "records",
-                                "records-o",
-                                "refund-o",
-                                "replay",
-                                "revoke",
-                                "scan",
-                                "search",
-                                "send-gift",
-                                "send-gift-o",
-                                "service",
-                                "service-o",
-                                "setting",
-                                "setting-o",
-                                "share",
-                                "share-o",
-                                "shield-o",
-                                "shop",
-                                "shop-collect",
-                                "shop-collect-o",
-                                "shop-o",
-                                "shopping-cart",
-                                "shopping-cart-o",
-                                "shrink",
-                                "sign",
-                                "smile",
-                                "smile-comment",
-                                "smile-comment-o",
-                                "smile-o",
-                                "sort",
-                                "star",
-                                "star-o",
-                                "stop",
-                                "stop-circle",
-                                "stop-circle-o",
-                                "success",
-                                "thumb-circle",
-                                "thumb-circle-o",
-                                "todo-list",
-                                "todo-list-o",
-                                "tosend",
-                                "tv-o",
-                                "umbrella-circle",
-                                "underway",
-                                "underway-o",
-                                "upgrade",
-                                "user",
-                                "user-circle-o",
-                                "user-o",
-                                "video",
-                                "video-o",
-                                "vip-card",
-                                "vip-card-o",
-                                "volume",
-                                "volume-o",
-                                "wap-home",
-                                "wap-home-o",
-                                "wap-nav",
-                                "warn-o",
-                                "warning",
-                                "warning-o",
-                                "weapp-nav",
-                                "wechat",
-                                "wechat-moments",
-                                "wechat-pay",
-                                "weibo",
-                                "youzan-shield"
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "enum": [
+                                        "add",
+                                        "add-o",
+                                        "add-square",
+                                        "after-sale",
+                                        "aim",
+                                        "alipay",
+                                        "apps-o",
+                                        "arrow",
+                                        "arrow-double-left",
+                                        "arrow-double-right",
+                                        "arrow-down",
+                                        "arrow-left",
+                                        "arrow-up",
+                                        "ascending",
+                                        "audio",
+                                        "award",
+                                        "award-o",
+                                        "back-top",
+                                        "bag",
+                                        "bag-o",
+                                        "balance-list",
+                                        "balance-list-o",
+                                        "balance-o",
+                                        "balance-pay",
+                                        "bar-chart-o",
+                                        "bars",
+                                        "bell",
+                                        "bill",
+                                        "bill-o",
+                                        "birthday-cake-o",
+                                        "bookmark",
+                                        "bookmark-o",
+                                        "browsing-history",
+                                        "browsing-history-o",
+                                        "brush-o",
+                                        "bulb-o",
+                                        "bullhorn-o",
+                                        "calendar-o",
+                                        "card",
+                                        "cart",
+                                        "cart-circle",
+                                        "cart-circle-o",
+                                        "cart-o",
+                                        "cash-back-record",
+                                        "cash-back-record-o",
+                                        "cash-o",
+                                        "cash-on-deliver",
+                                        "cashier-o",
+                                        "certificate",
+                                        "chart-trending-o",
+                                        "chat",
+                                        "chat-o",
+                                        "checked",
+                                        "circle",
+                                        "clear",
+                                        "clock",
+                                        "clock-o",
+                                        "close",
+                                        "closed-eye",
+                                        "cluster",
+                                        "cluster-o",
+                                        "column",
+                                        "comment",
+                                        "comment-circle",
+                                        "comment-circle-o",
+                                        "comment-o",
+                                        "completed",
+                                        "completed-o",
+                                        "contact",
+                                        "contact-o",
+                                        "coupon",
+                                        "coupon-o",
+                                        "credit-pay",
+                                        "cross",
+                                        "debit-pay",
+                                        "delete",
+                                        "delete-o",
+                                        "descending",
+                                        "description",
+                                        "description-o",
+                                        "desktop-o",
+                                        "diamond",
+                                        "diamond-o",
+                                        "discount",
+                                        "discount-o",
+                                        "down",
+                                        "ecard-pay",
+                                        "edit",
+                                        "ellipsis",
+                                        "enlarge",
+                                        "envelop-o",
+                                        "exchange",
+                                        "expand",
+                                        "expand-o",
+                                        "eye",
+                                        "eye-o",
+                                        "fail",
+                                        "failure",
+                                        "filter-o",
+                                        "fire",
+                                        "fire-o",
+                                        "flag-o",
+                                        "flower-o",
+                                        "font",
+                                        "font-family",
+                                        "font-o",
+                                        "free-postage",
+                                        "friends",
+                                        "friends-o",
+                                        "gem",
+                                        "gem-o",
+                                        "gift",
+                                        "gift-card",
+                                        "gift-card-o",
+                                        "gift-o",
+                                        "gold-coin",
+                                        "gold-coin-o",
+                                        "good-job",
+                                        "good-job-o",
+                                        "goods-collect",
+                                        "goods-collect-o",
+                                        "graphic",
+                                        "guide-o",
+                                        "home-o",
+                                        "hot",
+                                        "hot-o",
+                                        "hot-sale",
+                                        "hot-sale-o",
+                                        "hotel-o",
+                                        "idcard",
+                                        "info",
+                                        "info-o",
+                                        "invitation",
+                                        "label",
+                                        "label-o",
+                                        "like",
+                                        "like-o",
+                                        "link-o",
+                                        "list-switch",
+                                        "list-switching",
+                                        "live",
+                                        "location",
+                                        "location-o",
+                                        "lock",
+                                        "logistics",
+                                        "manager",
+                                        "manager-o",
+                                        "map-marked",
+                                        "medal",
+                                        "medal-o",
+                                        "miniprogram-o",
+                                        "minus",
+                                        "more",
+                                        "more-o",
+                                        "music",
+                                        "music-o",
+                                        "new",
+                                        "new-arrival",
+                                        "new-arrival-o",
+                                        "new-o",
+                                        "newspaper",
+                                        "newspaper-o",
+                                        "notes",
+                                        "notes-o",
+                                        "orders-o",
+                                        "other-pay",
+                                        "paid",
+                                        "passed",
+                                        "pause",
+                                        "pause-circle",
+                                        "pause-circle-o",
+                                        "peer-pay",
+                                        "pending-payment",
+                                        "phone",
+                                        "phone-circle",
+                                        "phone-circle-o",
+                                        "phone-o",
+                                        "photo",
+                                        "photo-fail",
+                                        "photo-o",
+                                        "photograph",
+                                        "play",
+                                        "play-circle",
+                                        "play-circle-o",
+                                        "plus",
+                                        "point-gift",
+                                        "point-gift-o",
+                                        "points",
+                                        "printer",
+                                        "qq",
+                                        "qr",
+                                        "qr-invalid",
+                                        "question",
+                                        "question-o",
+                                        "records",
+                                        "records-o",
+                                        "refund-o",
+                                        "replay",
+                                        "revoke",
+                                        "scan",
+                                        "search",
+                                        "send-gift",
+                                        "send-gift-o",
+                                        "service",
+                                        "service-o",
+                                        "setting",
+                                        "setting-o",
+                                        "share",
+                                        "share-o",
+                                        "shield-o",
+                                        "shop",
+                                        "shop-collect",
+                                        "shop-collect-o",
+                                        "shop-o",
+                                        "shopping-cart",
+                                        "shopping-cart-o",
+                                        "shrink",
+                                        "sign",
+                                        "smile",
+                                        "smile-comment",
+                                        "smile-comment-o",
+                                        "smile-o",
+                                        "sort",
+                                        "star",
+                                        "star-o",
+                                        "stop",
+                                        "stop-circle",
+                                        "stop-circle-o",
+                                        "success",
+                                        "thumb-circle",
+                                        "thumb-circle-o",
+                                        "todo-list",
+                                        "todo-list-o",
+                                        "tosend",
+                                        "tv-o",
+                                        "umbrella-circle",
+                                        "underway",
+                                        "underway-o",
+                                        "upgrade",
+                                        "user",
+                                        "user-circle-o",
+                                        "user-o",
+                                        "video",
+                                        "video-o",
+                                        "vip-card",
+                                        "vip-card-o",
+                                        "volume",
+                                        "volume-o",
+                                        "wap-home",
+                                        "wap-home-o",
+                                        "wap-nav",
+                                        "warn-o",
+                                        "warning",
+                                        "warning-o",
+                                        "weapp-nav",
+                                        "wechat",
+                                        "wechat-moments",
+                                        "wechat-pay",
+                                        "weibo",
+                                        "youzan-shield"
+                                    ]
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
+                                        }
+                                    },
+                                    "required": [
+                                        "path"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                }
                             ],
-                            "description": "The Vant icon name, e.g. success, warning, setting-o, arrow-left."
+                            "description": "The Vant icon name. Literal values should come from the VANT_ICON_NAMES list, for example success, warning-o, setting-o or arrow-left. Path bindings and function calls are also supported."
                         },
                         "size": {
                             "anyOf": [
@@ -3087,6 +3582,71 @@
                                 }
                             ],
                             "description": "REF:common_types.json#/$defs/Action"
+                        },
+                        "gap": {
+                            "anyOf": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": {
+                                            "type": "string",
+                                            "description": "A JSON Pointer path to a value in the data model."
+                                        }
+                                    },
+                                    "required": [
+                                        "path"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/DataBinding|A JSON Pointer path to a value in the data model."
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "call": {
+                                            "type": "string",
+                                            "description": "The name of the function to call."
+                                        },
+                                        "args": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "description": "Arguments passed to the function."
+                                        },
+                                        "returnType": {
+                                            "type": "string",
+                                            "enum": [
+                                                "string",
+                                                "number",
+                                                "boolean",
+                                                "array",
+                                                "object",
+                                                "any",
+                                                "void"
+                                            ],
+                                            "default": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "call",
+                                        "args"
+                                    ],
+                                    "additionalProperties": false,
+                                    "description": "REF:common_types.json#/$defs/FunctionCall|Invokes a named function on the client."
+                                }
+                            ],
+                            "description": "REF:common_types.json#/$defs/DynamicNumber|Represents a value that can be either a literal number, a path to a number in the data model, or a function call returning a number."
+                        },
+                        "style": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "description": "Inline CSS style object. Use camelCase keys such as backgroundColor, border, padding, borderRadius, color, boxShadow, or marginBottom."
                         }
                     },
                     "required": [
@@ -3363,6 +3923,16 @@
                                 "success"
                             ],
                             "default": "default"
+                        },
+                        "size": {
+                            "type": "string",
+                            "enum": [
+                                "large",
+                                "normal",
+                                "small",
+                                "mini"
+                            ],
+                            "default": "normal"
                         },
                         "action": {
                             "anyOf": [
@@ -7875,31 +8445,13 @@
         "spacingM": {
             "type": "string"
         },
-        "primaryColor": {
-            "type": "string"
-        },
-        "errorColor": {
-            "type": "string"
-        },
-        "backgroundColor": {
-            "type": "string"
-        },
-        "surfaceColor": {
-            "type": "string"
-        },
         "colorSuccess": {
             "type": "string"
         },
         "colorWarning": {
             "type": "string"
         },
-        "successColor": {
-            "type": "string"
-        },
-        "warningColor": {
-            "type": "string"
-        },
-        "roundRadius": {
+        "colorDanger": {
             "type": "string"
         }
     },
