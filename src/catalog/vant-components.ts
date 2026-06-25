@@ -240,7 +240,6 @@ export const VantTabsApi = {
           child: z.string(),
         }).strict(),
       ).min(1),
-      action: ActionSchema.optional(),
     })
     .strict(),
 } satisfies ComponentApi;
@@ -252,7 +251,6 @@ export const VantModalApi = {
       ...CommonProps,
       trigger: z.string(),
       content: z.string(),
-      action: ActionSchema.optional(),
     })
     .strict(),
 } satisfies ComponentApi;

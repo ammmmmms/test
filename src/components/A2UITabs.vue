@@ -11,9 +11,14 @@
   const { boundProps } = useBoundProps(toRef(props, 'node'), VantTabsApi);
   const tabs = computed(() => boundProps.value.tabs ?? []);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? false;
+  });
+
   const handleChange = (index: number) => {
+    if (effectiveDisabled.value) return;
     active.value = index;
-    boundProps.value.action?.();
   };
 </script>
 
@@ -26,6 +31,7 @@
       v-for="(tab, index) in tabs"
       :key="index"
       :title="tab.title"
+      :disabled="effectiveDisabled"
     >
       <ComponentNode
         v-if="tab.child"

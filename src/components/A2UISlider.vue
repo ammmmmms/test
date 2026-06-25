@@ -6,8 +6,12 @@
   import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantSliderApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantSliderApi);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const min = computed(() => boundProps.value.min ?? 0);
   const max = computed(() => boundProps.value.max ?? 100);
   const step = computed(() => boundProps.value.step ?? 1);
@@ -26,6 +30,7 @@
     :min="min"
     :max="max"
     :step="step"
+    :disabled="effectiveDisabled"
     @change="boundProps.action?.()"
   />
 </template>

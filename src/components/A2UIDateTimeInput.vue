@@ -6,8 +6,12 @@
   import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantDateTimeInputApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantDateTimeInputApi);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const label = computed(() => boundProps.value.label ?? '');
   const min = computed(() => boundProps.value.min);
   const max = computed(() => boundProps.value.max);
@@ -29,6 +33,7 @@
     :type="inputType"
     :data-min="min"
     :data-max="max"
+    :disabled="effectiveDisabled"
     @blur="boundProps.action?.()"
   />
 </template>

@@ -73,7 +73,10 @@ export function useBoundProps<Api extends ComponentApi>(
     cleanup();
   });
 
+  const contextDisabled = computed(() => context.disabled ?? false);
+
   return {
     boundProps: computed(() => boundPropsRef.value),
+    contextDisabled,
   };
 }

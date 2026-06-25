@@ -3,7 +3,7 @@
   import { ref } from 'vue';
   import type { ComponentModel } from '@a2ui/web_core/v0_9';
   import ComponentNode from '../core/ComponentNode.vue';
-  import { toRef } from 'vue';
+  import { toRef, computed } from 'vue';
   import { VantModalApi } from '../catalog/vant-components';
   import { useBoundProps } from '../composables/useBoundProps';
 
@@ -11,16 +11,20 @@
   const { boundProps } = useBoundProps(toRef(props, 'node'), VantModalApi);
   const open = ref(false);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? false;
+  });
+
   const show = (event?: MouseEvent) => {
+    if (effectiveDisabled.value) return;
     event?.stopPropagation();
     open.value = true;
-    boundProps.value.action?.();
   };
 
   const hide = (event?: MouseEvent) => {
     event?.stopPropagation();
     open.value = false;
-    boundProps.value.action?.();
   };
 </script>
 

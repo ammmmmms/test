@@ -9,13 +9,17 @@
   import { normalizeChildren } from '../composables/normalizeChildren';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantRowApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantRowApi);
   const { dispatchNodeAction } = useA2UI();
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const children = computed(() => normalizeChildren(boundProps.value.children));
   const justify = computed(() => boundProps.value.justify ?? 'start');
   const align = computed(() => boundProps.value.align ?? 'stretch');
-  const clickable = computed(() => !!boundProps.value.action);
+  const clickable = computed(() => !!boundProps.value.action && !effectiveDisabled.value);
   const rowStyle = computed<CSSProperties>(() => {
     const gap = Number(boundProps.value.gap);
     const style = { ...(boundProps.value.style ?? {}) } as CSSProperties;

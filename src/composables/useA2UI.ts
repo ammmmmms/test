@@ -16,6 +16,7 @@ export interface A2UIContext {
   processor: any;
   dataContextPath?: string;
   runtime: Required<A2UIRuntimeOptions>;
+  disabled?: boolean;
 }
 
 export const A2UI_CONTEXT_KEY: InjectionKey<A2UIContext> =

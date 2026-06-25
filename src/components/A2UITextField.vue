@@ -7,8 +7,12 @@
   import { getValidationMessage } from '../utils/validation';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantTextFieldApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantTextFieldApi);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const label = computed(() => boundProps.value.label ?? '');
   const placeholder = computed(() => boundProps.value.placeholder ?? '');
   const checks = computed(() => boundProps.value.checks ?? []);
@@ -43,6 +47,7 @@
     :autosize="variant === 'longText'"
     :error="!!errorMessage"
     :error-message="errorMessage"
+    :disabled="effectiveDisabled"
     @blur="boundProps.action?.()"
   />
 </template>

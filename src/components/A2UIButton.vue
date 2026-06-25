@@ -7,8 +7,12 @@
   import { VantButtonApi } from '../catalog/vant-components';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantButtonApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantButtonApi);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const childId = computed(() => boundProps.value.child);
   const label = computed(() => {
     return boundProps.value.label ?? boundProps.value.text ?? '';
@@ -48,6 +52,7 @@
     :plain="plain"
     :block="block"
     :size="size"
+    :disabled="effectiveDisabled"
     @click="onClick"
   >
     <ComponentNode

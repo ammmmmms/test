@@ -12,8 +12,12 @@
   import { useBoundProps } from '../composables/useBoundProps';
 
   const props = defineProps<{ node: ComponentModel }>();
-  const { boundProps } = useBoundProps(toRef(props, 'node'), VantChoicePickerApi);
+  const { boundProps, contextDisabled } = useBoundProps(toRef(props, 'node'), VantChoicePickerApi);
 
+  const effectiveDisabled = computed(() => {
+    if (boundProps.value.neverDisabled) return false;
+    return boundProps.value.disabled ?? contextDisabled.value;
+  });
   const options = computed<(string | number)[]>(() => boundProps.value.options ?? []);
   const label = computed(() => boundProps.value.label ?? '');
   const multiple = computed(() => boundProps.value.variant === 'multipleSelection');
@@ -43,6 +47,7 @@
         <VanCheckboxGroup
           v-if="multiple"
           v-model="modelValue"
+          :disabled="effectiveDisabled"
         >
           <VanCheckbox
             v-for="option in options"
@@ -56,6 +61,7 @@
         <VanRadioGroup
           v-else
           v-model="modelValue"
+          :disabled="effectiveDisabled"
         >
           <VanRadio
             v-for="option in options"

@@ -12,6 +12,7 @@
     surfaceId: string;
     onAction?: (action: any) => void;
     runtime?: A2UIRuntimeOptions;
+    disabled?: boolean;
   }>();
 
   type Unsubscribable = { unsubscribe: () => void };
@@ -136,6 +137,9 @@
     },
     get runtime() {
       return runtime.value;
+    },
+    get disabled() {
+      return props.disabled;
     },
     onAction: (action: any) => {
       props.onAction?.(action);
