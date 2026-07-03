@@ -61,6 +61,9 @@
           nextSurface.componentsModel.onDeleted.subscribe(() => {
             bumpRenderVersion();
           }),
+          nextSurface.onAction.subscribe((action: any) => {
+            props.onAction?.(action);
+          }),
         ];
       };
 
