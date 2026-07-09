@@ -184,7 +184,7 @@ export const VantChoicePickerApi = {
     .object({
       ...CommonProps,
       label: DynamicStringSchema.optional(),
-      options: z.array(z.union([z.string(), z.number()])),
+      options: DynamicStringListSchema,
       value: DynamicStringListSchema.optional(),
       variant: z
         .enum(['mutuallyExclusive', 'multipleSelection'])
